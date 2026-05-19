@@ -494,7 +494,7 @@ export default function App() {
       {wizardOpen && (
         <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-xl z-50 flex flex-col p-4 animate-in slide-in-from-bottom-full overflow-hidden">
           <div className="flex justify-between items-center mb-4 pt-2">
-            <h2 className="text-xl font-bold text-white flex items-center"><Target className="w-5 h-5 mr-2 text-pink-500"/> The Gatekeeper</h2>
+            <h2 className="text-xl font-bold text-white flex items-center"><Target className="w-5 h-5 mr-2 text-pink-500"/> Priority Wizard</h2>
             <button onClick={() => setWizardOpen(false)} className="text-slate-400 p-2"><X /></button>
           </div>
 
