@@ -25,6 +25,7 @@ const RICE_HINTS = {
   }
 };
 
+// --- DEMO Project ---
 const INITIAL_PROJECTS = [
   { id: 1, name: 'Web3 MMORPG', mission: 'Build the core battle loop for beta launch.' }
 ];
