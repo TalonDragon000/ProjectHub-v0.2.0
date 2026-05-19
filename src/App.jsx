@@ -269,15 +269,6 @@ export default function App() {
               <div className="flex justify-between items-center">
                 <h3 className="text-purple-400 text-xs font-bold uppercase tracking-widest flex items-center"><CheckCircle2 className="w-4 h-4 mr-1"/> Devlog</h3>
 
-                <button
-                  onClick={fireConfetti}
-                  className="py-1 px-3 inline-flex items-center gap-x-2 text-[10px] font-bold uppercase tracking-wider rounded-lg bg-pink-600 border border-pink-500 text-white hover:bg-pink-500 focus:outline-none transition-colors"
-                  type="button"
-                >
-                  Run Confetti
-                </button>
-              </div>
-
               <div className="space-y-2">
                 {completedTasks.length === 0 && <p className="text-sm text-slate-500 italic p-4 bg-slate-900 rounded-xl border border-slate-800 text-center">No confetti moments yet.</p>}
                 {completedTasks.slice().reverse().map(t => (
