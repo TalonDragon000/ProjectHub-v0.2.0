@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Chrome as Home, LayoutList, Plus, CircleHelp as HelpCircle, X, Target, Briefcase, Zap, CircleCheck as CheckCircle2, ChevronRight, ChevronLeft, Folder } from 'lucide-react';
+import { Home, LayoutList, Plus, CircleHelp as HelpCircle, X, Target, Briefcase, Zap, CircleCheck as CheckCircle2, ChevronRight, ChevronLeft, Folder } from 'lucide-react';
 
 // --- INITIAL DATA & CONFIG ---
 const COLUMNS = ['High', 'Med', 'Low', 'Later', 'To Sort'];
