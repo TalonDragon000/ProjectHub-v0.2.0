@@ -1,152 +1,139 @@
 # Project Hub [v0.2.0]
-A mobile prioritization and organization app
+A mobile-first prioritization and organization web app
 
 ProjectHub eliminates feature-bloat anxiety and "gut-feeling" roadmap changes by substituting traditional, impulsive drag-and-drop Kanban interactions with an **Intentional Prioritization Wizard** backed by the **RICE Scoring Framework** and **MoSCoW Filters**.
 
 ---
 
-## 🚀 Core Philosophy & Features
+## Core Philosophy & Features
 
 * **Single-Column Focus Workspace:** Unlike sprawling Kanban boards that induce cognitive overload, the Tasks workspace displays only **one priority column at a time** (High, Med, Low, Later, To Sort). A subtle **15px gradient "Peek" mechanic** on the screen edge signals additional columns waiting to be discovered via intuitive touch swipe gestures.
-* **The ProjectHub (Priority Wizard):** To prevent impulsive prioritization shifts, tasks can only be re-sorted or introduced into the roadmap by passing through an objective valuation modal. The Wizard weights metrics using a non-linear **Fibonacci Scale (1, 2, 3, 5, 8)** to eliminate decision fatigue and false precision.
-* **The Vault (Project File System):** A background management system that allows solo makers to capture, store, and hide away multiple inspirational project ideas. To enforce radical focus, **only one project can be active at a time**—switching projects reloads the entire application state.
-* **The Devlog (Recent Wins):** Checking off a task triggers an instantaneous center-screen **pixel-art confetti modal burst** to celebrate incremental momentum. Completed tasks glide automatically out of the active workspace into a reverse-chronological "Recent Wins" historical log on the Home dashboard.
+* **The Gatekeeper (Priority Wizard):** To prevent impulsive prioritization shifts, tasks can only be re-sorted or introduced into the roadmap by passing through an objective valuation modal. The Wizard weights metrics using a non-linear **Fibonacci Scale (1, 2, 3, 5, 8)** to eliminate decision fatigue and false precision.
+* **The Vault (Project File System):** A background management system that allows solo makers to capture, store, and switch between multiple project ideas. To enforce radical focus, **only one project can be active at a time** — switching projects reloads the entire dashboard state.
+* **The Devlog (Recent Wins):** Checking off a task triggers an instantaneous center-screen **confetti burst** to celebrate incremental momentum. Completed tasks glide automatically out of the active workspace into a reverse-chronological "Recent Wins" historical log on the Home dashboard.
 * **Ghost Entry & Brain Dumps:** Instantly offload raw mental clutter without interrupting your current focus. Use the global centralized **Action Dock (+)** to drop a "Quick Note" or use the dashed **"Ghost Card" entry** inside the "To Sort" column to queue unprioritized items for later review.
+* **Strategy Specs Panel (Coming Soon):** Interactive strategic configuration for project-specific target audiences (WHO / WHAT / WHY) is visible on the Home dashboard and reserved for a future release.
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technology | Description |
 | :--- | :--- | :--- |
-| **Framework** | Expo SDK 54 / React Native 0.81 | Cross-platform native compilation framework. |
-| **Navigation** | Expo Router v6 | Native, file-based tab navigation & modal handling. |
-| **Database** | Supabase (PostgreSQL + PostgREST) | Relational backing storage with real-time API bindings. |
-| **Auth Model** | Anonymous Device Identity | Zero-friction onboarding; no email or password required. |
-| **Secure Storage** | `expo-secure-store` | Hardware-backed keychains for local device identity retention. |
-| **UI Components** | Tailwind CSS / NativeWind | Utility-first "Soft-Dark Synthwave" theme construction. |
-| **Graphics** | `lucide-react-native` / `react-native-svg` | Vector icons and performance-optimized SVG progress rings. |
+| **Framework** | React 18.3.1 | Component-based UI library for building the single-page application. |
+| **Build Tool** | Vite 5.3.1 | Fast local dev server and optimized production bundler. |
+| **Styling** | Tailwind CSS 3.4.4 | Utility-first CSS framework for the Soft-Dark Synthwave theme. |
+| **Icons** | lucide-react 0.400.0 | Lightweight SVG icon library for all UI glyphs. |
+| **Confetti** | canvas-confetti (CDN) | Browser-native confetti burst on task completion. |
+| **Database** | Supabase (PostgreSQL) | Configured and ready; full persistence integration is in progress. |
+| **Hosting** | Netlify | Static site deployment with SPA redirect rules via `netlify.toml`. |
+| **PWA** | Web App Manifest + Service Worker | Installable on mobile home screens with offline asset caching. |
 
 ---
 
-## 📐 Prioritization Architecture & Logic
+## Prioritization Architecture & Logic
 
 The core placement engine acts as an objective validator for your roadmap, calculating real-time tier predictions inside the wizard using a dual-framework hybrid approach:
 
 ### 1. The RICE Formula
-$$Score = \frac{Reach \times Impact \times Confidence}{Effort}$$
 
-* **Reach:** How many users does this affect per milestone cycle?
+```
+Score = (Reach x Impact x Confidence) / Effort
+```
+
+* **Reach:** How many users does this affect?
 * **Impact:** How much does this move the structural needle? *(1 = Minimal, 8 = Massive)*
-* **Confidence:** How structurally sure are you of these exact estimates? 
-* **Effort:** How many person-weeks will completion require? *(Lower effort yields higher scores)*
+* **Confidence:** How sure are you of these estimates?
+* **Effort:** How much work is required? *(Higher effort lowers the score)*
 
-*Note: All slider selections utilize the Fibonacci progression `(1, 2, 3, 5, 8)`. This forces clear contrast between items, preventing analysis paralysis between arbitrary adjacent linear scales (e.g., a 6 vs. a 7).*
+*Note: All selections utilize the Fibonacci progression `(1, 2, 3, 5, 8)`. This forces clear contrast between items, preventing analysis paralysis between arbitrary adjacent linear scales (e.g., a 6 vs. a 7).*
 
 ### 2. The MoSCoW Override & Tie-Breaker Filters
-* **Must:** Overrides any calculated RICE mathematical score and routes the item **Always to High Priority**.
-* **Won't:** Overrides any calculated RICE mathematical score and routes the item **Always to Later (The Icebox)**.
-* **Should / Could:** Serves as a deterministic mathematical tie-breaker when two distinct tasks evaluate to identical RICE scores.
+* **Must:** Overrides any calculated RICE score and routes the item **always to High Priority**.
+* **Won't:** Overrides any calculated RICE score and routes the item **always to Later (The Icebox)**.
+* **Should / Could:** Used as a contextual label when RICE scores determine the column destination.
 
-### 📊 Metric Thresholds
+### Metric Thresholds
+
 | MoSCoW / Calculated Score | Predicted Column Destination |
 | :--- | :--- |
 | `Must` | **High** (Enforced Always) |
 | `Won't` | **Later** (Enforced Always) |
-| Score $\ge 25$ | **High** |
-| Score $10 - 24$ | **Med** |
-| Score $< 10$ | **Low** |
+| Score >= 25 | **High** |
+| Score 10 - 24 | **Med** |
+| Score < 10 | **Low** |
 
 ---
 
-## 🗂️ Data Schema
+## Data Model (In-Memory)
 
-### `projects`
-| Column | Type | Constraints / Description |
-| :--- | :--- | :--- |
-| `id` | `uuid` | Primary Key, Auto-generated |
-| `name` | `text` | Project display name |
-| `mission` | `text` | One-sentence orientation/purpose statement |
-| `device_id` | `text` | Owning device hardware UUID (Row Level Security Key) |
-| `user_id` | `uuid` | Nullable; Reserved for future cross-device sync authentication layers |
-| `created_at` | `timestamptz` | Generation timestamp |
+All data is currently managed in React component state. Supabase integration is in progress. The current in-memory shape is:
 
-### `tasks`
-| Column | Type | Constraints / Description |
+### Projects
+| Field | Type | Description |
 | :--- | :--- | :--- |
-| `id` | `uuid` | Primary Key, Auto-generated |
-| `project_id` | `uuid` | Foreign Key references `projects(id)` ON DELETE CASCADE |
-| `title` | `text` | Outcome-based goal/task title |
-| `reach` | `int` | Fibonacci parameter (1 / 2 / 3 / 5 / 8) |
-| `impact` | `int` | Fibonacci parameter (1 / 2 / 3 / 5 / 8) |
-| `confidence` | `int` | Fibonacci parameter (1 / 2 / 3 / 5 / 8) |
-| `effort` | `int` | Fibonacci parameter (1 / 2 / 3 / 5 / 8) |
-| `moscow` | `text` | Filtering categorization enum (`Must` / `Should` / `Could` / `Won't`) |
-| `priority_column` | `text` | Destination column assignment (`High` / `Med` / `Low` / `Later` / `To Sort`) |
+| `id` | `number` | Auto-incremented integer or `Date.now()` timestamp |
+| `name` | `string` | Project display name |
+| `mission` | `string` | One-sentence orientation/purpose statement |
+
+### Tasks
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| `id` | `number` | Auto-incremented integer or `Date.now()` timestamp |
+| `projectId` | `number` | References parent project `id` |
+| `title` | `string` | Outcome-based goal/task title |
+| `reach` | `number` | Fibonacci parameter (1 / 2 / 3 / 5 / 8) |
+| `impact` | `number` | Fibonacci parameter (1 / 2 / 3 / 5 / 8) |
+| `confidence` | `number` | Fibonacci parameter (1 / 2 / 3 / 5 / 8) |
+| `effort` | `number` | Fibonacci parameter (1 / 2 / 3 / 5 / 8) |
+| `moscow` | `string` | `Must` / `Should` / `Could` / `Won't` |
+| `column` | `string` | `High` / `Med` / `Low` / `Later` / `To Sort` |
 | `completed` | `boolean` | State toggle flag, default `false` |
-| `tags` | `text[]` | Flexible custom strategy tag array (e.g., Marketing, Core Feature, Maintenance) |
-| `device_id` | `text` | Owning device hardware UUID (Row Level Security Key) |
-| `created_at` | `timestamptz` | Generation timestamp |
+| `tags` | `string[]` | Strategy tag array (e.g., Marketing, Core Feature) |
 
 ---
 
-## 🔒 Security Model (Device-Scoped Isolation)
-
-ProjectHub runs a decentralized, zero-account architecture providing complete user data privacy out-of-the-box without requiring identity provider federation:
-
-1.  **Identity Seeding:** On initial execution, `lib/deviceId.ts` evaluates local storage. If blank, it structuralizes a secure UUID v4 and commits it permanently into the platform's hardware secure enclave via `expo-secure-store` (iOS/Android) or `localStorage` fallback (Web environment).
-2.  **Header Injection:** The singleton engine `lib/supabase.ts` exposes a reactive context. On startup, `store/appStore.ts` reads the device UUID, mounts it inside the active memory loop, and passes it directly into a custom `x-device-id` HTTP header binding on every outgoing standard network call.
-3.  **RLS Enforcement:** PostgreSQL **Row Level Security (RLS)** is explicitly enabled on both database endpoints. All policies evaluate incoming transaction headers:
-    ```sql
-    CREATE POLICY "Device hardware enforcement rule" 
-    ON public.tasks 
-    FOR ALL 
-    USING (device_id = current_setting('request.headers')::json->>'x-device-id');
-    ```
-4.  **Implicit Context Protection:** Requests dispatched without valid structural tracking attributes or containing variant headers yield zero matched tuples on query operations and terminate with structural `WITH CHECK` exceptions on mutations. This renders the global Supabase anon key safe to publish in client binaries.
-
----
-
-## 💻 Local Development Setup
+## Local Development Setup
 
 ### Prerequisites
 * Node.js 18+ (LTS recommended)
-* NPM or Yarn package managers
-* A clean Supabase project workspace instance (Free tier is perfectly sufficient)
+* NPM or Yarn
 
 ### Steps
 
-1.  **Clone and Install Dependencies:**
+1. **Clone and Install Dependencies:**
     ```bash
-    git clone https://github.com/TalonDragon000/project-manager-app.git
-    cd project-manager-app
+    git clone https://github.com/TalonDragon000/project-hub.git
+    cd project-hub
     npm install
     ```
 
-2.  **Environment Setup:**
-    Create a `.env` file at your structural workspace project root directory:
+2. **Environment Setup:**
+    Create a `.env` file at the project root:
     ```env
-    EXPO_PUBLIC_SUPABASE_URL=your_supabase_project_endpoint_url
-    EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_public_anonymous_key
+    VITE_SUPABASE_URL=your_supabase_project_url
+    VITE_SUPABASE_ANON_KEY=your_supabase_public_anon_key
     ```
 
-3.  **Apply Relational Migrations:**
-    Copy and paste the sequential execution files found within `supabase/migrations/` directly into your remote Supabase Project SQL Editor interface in chronological order, or issue the schema directly utilizing the Supabase CLI infrastructure.
-
-4.  **Launch Local Metro Server:**
+3. **Start the Dev Server:**
     ```bash
     npm run dev
     ```
-    * Press `i` to mount inside the local iOS simulator cluster.
-    * Press `a` to route into the attached Android virtual device emulator.
-    * Press `w` to spin up a responsive local web testing frame.
+    Open `http://localhost:5173` in your browser. The app is optimized for a mobile viewport — use browser DevTools device emulation for the best experience.
+
+4. **Build for Production:**
+    ```bash
+    npm run build
+    ```
+    Output is placed in `dist/`. Deploy the `dist/` folder to any static host (Netlify is pre-configured via `netlify.toml`).
 
 ---
 
-## 🛣️ Upcoming Roadmap
+## Upcoming Roadmap
 
-* [ ] **Strategy Specs Panel:** Interactive strategic configuration for project-specific target audiences (WHO / WHAT / WHY) inside the dashboard.
-* [ ] **Cross-Device Account Sync:** An opt-in secondary authentication middleware layer to transform anonymous device tokens into unified multi-device profiles.
-* [ ] **Data Archival Pipelines:** Toggle parameters to completely purge or permanently compress completed tasks from the active UI rendering context.
-* [ ] **Project Velocity Analytics:** Visual telemetry reports tracing cycle execution speeds and milestone completion distributions over time.
-* [ ] **Stale-Task Push Triggers:** Local automated operating system push notifications targeting high-priority goals lingering inside an unexecuted column profile.
+* [ ] **Supabase Persistence:** Wire up full create/read/update for projects and tasks against the live PostgreSQL database.
+* [ ] **Device-Scoped Identity:** Zero-friction anonymous device identity using `localStorage` UUID seeding, with Supabase RLS policies scoped per device.
+* [ ] **Strategy Specs Panel:** Interactive configuration for project-specific target audiences (WHO / WHAT / WHY) inside the Home dashboard.
+* [ ] **Cross-Device Account Sync:** Opt-in authentication layer to transform anonymous device tokens into unified multi-device profiles.
+* [ ] **Project Velocity Analytics:** Visual telemetry tracing cycle execution speeds and milestone completion distributions over time.
+* [ ] **Stale-Task Browser Notifications:** Browser push notifications targeting high-priority goals lingering in an unexecuted column.
