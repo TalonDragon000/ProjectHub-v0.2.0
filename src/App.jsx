@@ -663,8 +663,10 @@ export default function App() {
         <div className="absolute top-[45%] left-1/2 translate-y-4 -translate-x-1/2 z-[100] animate-in fade-in slide-in-from-top-4 duration-300 pointer-events-none">
           <div className="bg-slate-900 border border-pink-500 rounded-2xl px-12 py-3 shadow-[0_0_30px_rgba(236,72,153,0.35)] flex items-center space-x-3">
             <h2>🎉</h2>
-            <h2 className="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-cyan-400">Goal Crushed!</h2>
-            <h2 className="text-xs text-slate-400 font-bold">Momentum increased.</h2>
+            <h2 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-violet-400 text-center">
+                Goal Crushed!
+              </h2>
+            <p className="text-slate-300 mt-3 font-bold text-center">Momentum increased.</p>
           </div>
         </div>
       )}
