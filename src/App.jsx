@@ -26,13 +26,13 @@ const RICE_HINTS = {
 };
 
 const INITIAL_PROJECTS = [
-  { id: 1, name: 'Web3 MMORPG', mission: 'Build the core battle loop for beta launch.' }
+  { id: 1, name: 'Demo Project', mission: 'A sample setup for you to explore.' }
 ];
 
 const INITIAL_TASKS = [
-  { id: 1, projectId: 1, title: 'Setup Authentication', reach: 5, impact: 8, confidence: 5, effort: 3, moscow: 'Must', column: 'High', completed: false, tags: ['Core Feature'] },
-  { id: 2, projectId: 1, title: 'Design Landing Page', reach: 8, impact: 5, confidence: 8, effort: 5, moscow: 'Should', column: 'Med', completed: false, tags: ['Marketing'] },
-  { id: 3, projectId: 1, title: 'Refactor State Management', reach: 8, impact: 3, confidence: 3, effort: 8, moscow: 'Could', column: 'Low', completed: false, tags: ['Maintenance'] },
+  { id: 1, projectId: 1, title: 'Swipe to view next column', reach: 5, impact: 8, confidence: 5, effort: 3, moscow: 'Must', column: 'High', completed: false, tags: ['Core Feature'] },
+  { id: 2, projectId: 1, title: 'Long-press to edit task', reach: 8, impact: 5, confidence: 8, effort: 5, moscow: 'Should', column: 'Med', completed: false, tags: ['Marketing'] },
+  { id: 3, projectId: 1, title: 'Complete task to archive', reach: 8, impact: 3, confidence: 3, effort: 8, moscow: 'Could', column: 'Low', completed: false, tags: ['Maintenance'] },
 ];
 
 const fireConfetti = () => {
@@ -494,7 +494,7 @@ export default function App() {
       {wizardOpen && (
         <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-xl z-50 flex flex-col p-4 animate-in slide-in-from-bottom-full overflow-hidden">
           <div className="flex justify-between items-center mb-4 pt-2">
-            <h2 className="text-xl font-bold text-white flex items-center"><Target className="w-5 h-5 mr-2 text-pink-500"/> The Gatekeeper</h2>
+            <h2 className="text-xl font-bold text-white flex items-center"><Target className="w-5 h-5 mr-2 text-pink-500"/> Priority Wizard</h2>
             <button onClick={() => setWizardOpen(false)} className="text-slate-400 p-2"><X /></button>
           </div>
 
