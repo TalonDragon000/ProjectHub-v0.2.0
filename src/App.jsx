@@ -518,7 +518,7 @@ export default function App() {
 
                 {/* Custom Tags */}
                 {wizardForm.tags.filter(t => !QUICK_TAGS.includes(t)).map(tag => (
-                  <button key={tag} onClick={() => toggleTag(tag)} className="text-[10px] px-2 py-1 rounded-full border bg-pink-500 border-pink-500 text-white transition-colors">
+                  <button key={tag} onClick={() => toggleTag(tag)} className="text-[10px] px-2 py-1 my-1 rounded-full border bg-pink-500 border-pink-500 text-white transition-colors">
                     {tag} ×
                   </button>
                 ))}
