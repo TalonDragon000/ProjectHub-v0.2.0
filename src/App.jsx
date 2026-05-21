@@ -277,7 +277,7 @@ export default function App() {
                 {completedTasks.slice().reverse().map(t => (
                   <div key={t.id} className="p-3 bg-bg-surface rounded-xl border border-subtle flex justify-between items-center opacity-60">
                     <span className="line-through text-text-muted text-sm">{t.title}</span>
-                    <span className="text-[10px] bg-priority-med-dim text-priority-med-text px-2 py-1 rounded border border-priority-med">☑️ Done</span>
+                    <span className="text-[10px] bg-priority-med/30 text-priority-med-text px-2 py-1 rounded border border-priority-med">☑️ Done</span>
                   </div>
                 ))}
               </div>
