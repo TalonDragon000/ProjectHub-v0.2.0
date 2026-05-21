@@ -60,6 +60,7 @@
   --priority-high-bg:     #ec4899; /* pink-500 */
   --priority-high-text:   #f472b6; /* pink-400 */
   --priority-high-border: #ec4899; /* pink-500 */
+  --priority-high-bg-dim:  rgba(236, 72, 153, 0.2);
 
   --priority-med-bg:     #a855f7; /* purple-500 */
   --priority-med-text:   #c084fc; /* purple-400 */
@@ -69,10 +70,12 @@
   --priority-low-bg:     #6366f1; /* indigo-500 */
   --priority-low-text:   #818cf8; /* indigo-400 */
   --priority-low-border: #6366f1; /* indigo-500 */
+  --priority-low-bg-dim:   rgba(99, 102, 241, 0.2);
 
   --priority-later-bg:     #6b7280; /* gray-500 */
   --priority-later-text:   #9ca3af; /* gray-400 */
   --priority-later-border: #6b7280; /* gray-500 */
+  --priority-later-bg-dim: rgba(107, 114, 128, 0.2);
 
   /* --- Confetti --- */
   --confetti-1: #ec4899; /* pink-500   */
