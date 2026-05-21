@@ -1,0 +1,168 @@
+/* ============================================================
+   THEME: Synthwave Dark (Default)
+   All color tokens for the app. To create a new theme, copy
+   this entire :root block, change the comment label, swap the
+   hex/rgba values, and activate it by replacing :root below.
+   ============================================================ */
+
+:root {
+  /* --- Backgrounds --- */
+  --bg-base:    #020617; /* slate-950 */
+  --bg-surface: #0f172a; /* slate-900 */
+  --bg-raised:  #1e293b; /* slate-800 */
+  --bg-overlay: #334155; /* slate-700 */
+
+  /* --- Borders --- */
+  --border-subtle:  #1e293b; /* slate-800 */
+  --border-default: #334155; /* slate-700 */
+  --border-strong:  #475569; /* slate-600 */
+
+  /* --- Text --- */
+  --text-primary:   #e2e8f0; /* slate-200 */
+  --text-secondary: #cbd5e1; /* slate-300 */
+  --text-muted:     #94a3b8; /* slate-400 */
+  --text-faint:     #64748b; /* slate-500 */
+  --text-inverted:  #020617; /* slate-950 */
+
+  /* --- Accent Primary (Pink) --- */
+  --accent-primary:        #ec4899; /* pink-500 */
+  --accent-primary-dark:   #db2777; /* pink-600 */
+  --accent-primary-text:   #f472b6; /* pink-400 */
+  --accent-primary-border: #ec4899; /* pink-500 */
+  --accent-primary-bg-dim: rgba(236, 72, 153, 0.3); /* pink-900/30 */
+  --accent-primary-shadow: rgba(236, 72, 153, 0.30);
+  --accent-primary-toast-shadow: rgba(236, 72, 153, 0.35);
+
+  /* --- Accent Secondary (Cyan) --- */
+  --accent-secondary:        #06b6d4; /* cyan-500 */
+  --accent-secondary-text:   #22d3ee; /* cyan-400 */
+  --accent-secondary-border: #22d3ee; /* cyan-400 */
+  --accent-secondary-shadow: rgba(6, 182, 212, 0.5);
+
+  /* --- Accent Tertiary (Violet) --- */
+  --accent-tertiary:        #7c3aed; /* violet-600 */
+  --accent-tertiary-alt:    #a78bfa; /* violet-400 */
+  --accent-tertiary-text:   #a78bfa; /* violet-400 */
+  --accent-tertiary-text-2: #8b5cf6; /* violet-500 */
+  --accent-tertiary-border: #8b5cf6; /* violet-500 */
+  --accent-tertiary-bg-dim: rgba(124, 58, 237, 0.2); /* violet-900/20 */
+
+  /* --- Accent Amber --- */
+  --accent-amber:        #d97706; /* amber-600 */
+  --accent-amber-text:   #f59e0b; /* amber-500 */
+  --accent-amber-border: #f59e0b; /* amber-500 */
+  --accent-amber-bg-dim: rgba(245, 158, 11, 0.2); /* amber-500/20 */
+  --accent-amber-border-dim: rgba(245, 158, 11, 0.5); /* amber-500/50 */
+  --accent-amber-shadow: rgba(217, 119, 6, 0.2);
+
+  /* --- Priority Colors --- */
+  --priority-high-bg:     #ec4899; /* pink-500 */
+  --priority-high-text:   #f472b6; /* pink-400 */
+  --priority-high-border: #ec4899; /* pink-500 */
+
+  --priority-med-bg:     #a855f7; /* purple-500 */
+  --priority-med-text:   #c084fc; /* purple-400 */
+  --priority-med-border: #a855f7; /* purple-500 */
+  --priority-med-bg-dim: rgba(168, 85, 247, 0.3);
+
+  --priority-low-bg:     #6366f1; /* indigo-500 */
+  --priority-low-text:   #818cf8; /* indigo-400 */
+  --priority-low-border: #6366f1; /* indigo-500 */
+
+  --priority-later-bg:     #6b7280; /* gray-500 */
+  --priority-later-text:   #9ca3af; /* gray-400 */
+  --priority-later-border: #6b7280; /* gray-500 */
+
+  /* --- Confetti --- */
+  --confetti-1: #ec4899; /* pink-500   */
+  --confetti-2: #06b6d4; /* cyan-400   */
+  --confetti-3: #a855f7; /* violet-500 */
+  --confetti-4: #f59e0b; /* amber-500  */
+  --confetti-5: #10b981; /* emerald-500 */
+
+  /* --- Shadows --- */
+  --shadow-nav:       rgba(0, 0, 0, 0.5);
+  --shadow-dock-btn:  rgba(236, 72, 153, 0.30);
+  --shadow-selected:  rgba(6, 182, 212, 0.5);
+  --shadow-toast:     rgba(236, 72, 153, 0.35);
+}
+
+
+/* ============================================================
+   THEME: [Blank Slate] — copy this block to create a new theme
+   Replace :root above with this block to activate.
+   ============================================================ */
+
+/*
+:root {
+  --bg-base:    ;
+  --bg-surface: ;
+  --bg-raised:  ;
+  --bg-overlay: ;
+
+  --border-subtle:  ;
+  --border-default: ;
+  --border-strong:  ;
+
+  --text-primary:   ;
+  --text-secondary: ;
+  --text-muted:     ;
+  --text-faint:     ;
+  --text-inverted:  ;
+
+  --accent-primary:        ;
+  --accent-primary-dark:   ;
+  --accent-primary-text:   ;
+  --accent-primary-border: ;
+  --accent-primary-bg-dim: ;
+  --accent-primary-shadow: ;
+  --accent-primary-toast-shadow: ;
+
+  --accent-secondary:        ;
+  --accent-secondary-text:   ;
+  --accent-secondary-border: ;
+  --accent-secondary-shadow: ;
+
+  --accent-tertiary:        ;
+  --accent-tertiary-alt:    ;
+  --accent-tertiary-text:   ;
+  --accent-tertiary-text-2: ;
+  --accent-tertiary-border: ;
+  --accent-tertiary-bg-dim: ;
+
+  --accent-amber:        ;
+  --accent-amber-text:   ;
+  --accent-amber-border: ;
+  --accent-amber-bg-dim: ;
+  --accent-amber-border-dim: ;
+  --accent-amber-shadow: ;
+
+  --priority-high-bg:     ;
+  --priority-high-text:   ;
+  --priority-high-border: ;
+
+  --priority-med-bg:     ;
+  --priority-med-text:   ;
+  --priority-med-border: ;
+  --priority-med-bg-dim: ;
+
+  --priority-low-bg:     ;
+  --priority-low-text:   ;
+  --priority-low-border: ;
+
+  --priority-later-bg:     ;
+  --priority-later-text:   ;
+  --priority-later-border: ;
+
+  --confetti-1: ;
+  --confetti-2: ;
+  --confetti-3: ;
+  --confetti-4: ;
+  --confetti-5: ;
+
+  --shadow-nav:      ;
+  --shadow-dock-btn: ;
+  --shadow-selected: ;
+  --shadow-toast:    ;
+}
+*/
