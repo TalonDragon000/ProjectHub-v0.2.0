@@ -194,17 +194,17 @@ export default function App() {
   const nextTasks = projectTasks.filter(t => (t.column === 'Med' || t.column === 'Low') && !t.completed);
 
   return (
-    <div className="w-full max-w-md mx-auto h-screen bg-base text-text-primary flex flex-col font-sans relative overflow-hidden select-none">
+    <div className="w-full max-w-md mx-auto h-screen bg-base text-primary flex flex-col font-sans relative overflow-hidden select-none">
 
       {/* --- HEADER --- */}
       <header className="p-4 border-b border-subtle flex justify-between items-center bg-surface z-10">
         <div onClick={() => setVaultOpen(true)} className="cursor-pointer active:opacity-70 flex items-center space-x-2">
-          <Folder className="w-5 h-5 text-accent-tertiary-text" />
+          <Folder className="w-5 h-5 text-accent-tertiary" />
           <div>
-            <h1 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-accent-primary to-accent-secondary-text leading-tight">
+            <h1 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-accent-primary to-accent-secondary leading-tight">
               {activeProject?.name || "Project Hub"}
             </h1>
-            <p className="text-[10px] text-text-muted uppercase tracking-wider font-bold">Tap to open Vault</p>
+            <p className="text-[10px] text-muted uppercase tracking-wider font-bold">Tap to open Vault</p>
           </div>
         </div>
       </header>
@@ -220,26 +220,26 @@ export default function App() {
               <div className="relative w-16 h-16 flex-shrink-0">
                 <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
                   <path className="text-bg-raised" strokeWidth="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                  <path className="text-accent-secondary-text" strokeDasharray={`${(completedTasks.length / (projectTasks.length || 1)) * 100}, 100`} strokeWidth="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path className="text-accent-secondary" strokeDasharray={`${(completedTasks.length / (projectTasks.length || 1)) * 100}, 100`} strokeWidth="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                 </svg>
-                <div className="absolute inset-0 flex items-center justify-center text-xs font-bold text-accent-secondary-text">
+                <div className="absolute inset-0 flex items-center justify-center text-xs font-bold text-accent-secondary">
                   {Math.round((completedTasks.length / (projectTasks.length || 1)) * 100)}%
                 </div>
               </div>
               <div>
-                <h2 className="font-bold text-sm text-text-secondary">Mission</h2>
-                <p className="text-xs text-text-muted leading-snug italic">"{activeProject?.mission}"</p>
+                <h2 className="font-bold text-sm text-secondary">Mission</h2>
+                <p className="text-xs text-muted leading-snug italic">"{activeProject?.mission}"</p>
               </div>
             </section>
 
             {/* Strategy Specs (Who, What, Why) */}
             <section className="space-y-2">
-              <h3 className="text-accent-secondary-text text-xs font-bold uppercase tracking-widest flex items-center"><Target className="w-4 h-4 mr-1"/> Strategy Specs</h3><span className="text-[10px] text-text-faint">( Coming Soon )</span>
+              <h3 className="text-accent-secondary text-xs font-bold uppercase tracking-widest flex items-center"><Target className="w-4 h-4 mr-1"/> Strategy Specs</h3><span className="text-[10px] text-faint">( Coming Soon )</span>
               <div className="grid grid-cols-3 gap-2">
                 {['WHO (Audience)', 'WHAT (Product)', 'WHY (Problem)'].map(spec => (
                   <div key={spec} className="bg-surface p-3 rounded-xl border border-subtle border-dashed text-center flex flex-col justify-center items-center opacity-60">
-                    <span className="text-[10px] text-text-faint mb-1">{spec}</span>
-                    <Plus className="w-4 h-4 text-text-faint" />
+                    <span className="text-[10px] text-faint mb-1">{spec}</span>
+                    <Plus className="w-4 h-4 text-faint" />
                   </div>
                 ))}
               </div>
@@ -247,19 +247,19 @@ export default function App() {
 
             {/* GO Roadmap (Timeline) */}
             <section className="space-y-2">
-              <h3 className="text-accent-primary-text text-xs font-bold uppercase tracking-widest flex items-center"><Zap className="w-4 h-4 mr-1"/> GO Roadmap</h3>
+              <h3 className="text-accent-primary text-xs font-bold uppercase tracking-widest flex items-center"><Zap className="w-4 h-4 mr-1"/> GO Roadmap</h3>
               <div className="bg-surface rounded-2xl p-4 border border-subtle space-y-4 shadow-lg">
                 <div className="border-l-2 border-accent-primary pl-4 relative">
                   <div className="absolute w-2 h-2 bg-priority-high rounded-full -left-[5px] top-1"></div>
                   <span className="text-xs font-bold text-accent-primary uppercase">Now</span>
-                  {nowTasks.length === 0 ? <p className="text-xs text-text-faint italic mt-1">No high priority goals.</p> :
-                    nowTasks.map(t => <p key={t.id} className="text-sm text-text-primary mt-1">{t.title}</p>)}
+                  {nowTasks.length === 0 ? <p className="text-xs text-faint italic mt-1">No high priority goals.</p> :
+                    nowTasks.map(t => <p key={t.id} className="text-sm text-primary mt-1">{t.title}</p>)}
                 </div>
                 <div className="border-l-2 border-priority-med pl-4 relative">
                   <div className="absolute w-2 h-2 bg-priority-med rounded-full -left-[5px] top-1"></div>
-                  <span className="text-xs font-bold text-priority-med-text uppercase">Next</span>
-                  {nextTasks.length === 0 ? <p className="text-xs text-text-faint italic mt-1">Empty queue.</p> :
-                    nextTasks.map(t => <p key={t.id} className="text-sm text-text-muted mt-1">{t.title}</p>)}
+                  <span className="text-xs font-bold text-priority-med uppercase">Next</span>
+                  {nextTasks.length === 0 ? <p className="text-xs text-faint italic mt-1">Empty queue.</p> :
+                    nextTasks.map(t => <p key={t.id} className="text-sm text-muted mt-1">{t.title}</p>)}
                 </div>
               </div>
             </section>
@@ -267,17 +267,17 @@ export default function App() {
             {/* Devlog (Recent Wins) */}
             <section className="space-y-2">
               <div className="flex justify-between items-center">
-                <h3 className="text-accent-tertiary-text text-xs font-bold uppercase tracking-widest flex items-center"><CheckCircle2 className="w-4 h-4 mr-1"/> Devlog</h3>
+                <h3 className="text-accent-tertiary text-xs font-bold uppercase tracking-widest flex items-center"><CheckCircle2 className="w-4 h-4 mr-1"/> Devlog</h3>
               </div>
 
               <div className="space-y-2">
-                {completedTasks.length === 0 && <div className="text-sm text-text-faint italic p-4 bg-surface rounded-xl border border-subtle text-center">
+                {completedTasks.length === 0 && <div className="text-sm text-faint italic p-4 bg-surface rounded-xl border border-subtle text-center">
                   <p>Devlog Empty.</p>
                 <span className="text-[10px] not-italic">( Complete a task to start the list. )</span></div>}
                 {completedTasks.slice().reverse().map(t => (
                   <div key={t.id} className="p-3 bg-surface rounded-xl border border-subtle flex justify-between items-center opacity-60">
-                    <span className="line-through text-text-muted text-sm">{t.title}</span>
-                    <span className="text-[10px] bg-priority-med/30 text-priority-med-text px-2 py-1 rounded border border-priority-med">☑️ Done</span>
+                    <span className="line-through text-muted text-sm">{t.title}</span>
+                    <span className="text-[10px] bg-priority-med/30 text-priority-med px-2 py-1 rounded border border-priority-med">☑️ Done</span>
                   </div>
                 ))}
               </div>
@@ -291,7 +291,7 @@ export default function App() {
             {/* Pagination Header */}
             <div className="flex justify-between items-center px-4 mb-4">
               <h2 className="text-2xl font-black tracking-wide uppercase text-white flex items-center">
-                {COLUMNS[activeColIndex]} <span className="text-text-faint text-sm ml-2 font-bold tracking-normal uppercase">Priority</span>
+                {COLUMNS[activeColIndex]} <span className="text-faint text-sm ml-2 font-bold tracking-normal uppercase">Priority</span>
               </h2>
               <div className="flex space-x-1.5">
                 {COLUMNS.map((col, i) => (
@@ -304,10 +304,10 @@ export default function App() {
               {/* Left "Peek" Mechanic for backward navigation */}
               {activeColIndex > 0 && (
                 <div
-                  className="w-[15px] h-full bg-gradient-to-r from-bg-raised/80 to-transparent border-r border-border-default/50 flex flex-col justify-center items-center cursor-pointer backdrop-blur-sm"
+                  className="w-[15px] h-full bg-gradient-to-r from-bg-raised/80 to-transparent border-r border-default/50 flex flex-col justify-center items-center cursor-pointer backdrop-blur-sm"
                   onClick={() => setActiveColIndex(c => c - 1)}
                 >
-                  <ChevronLeft className="text-text-faint/50 w-3 h-3 -mr-1" />
+                  <ChevronLeft className="text-faint/50 w-3 h-3 -mr-1" />
                 </div>
               )}
 
@@ -315,7 +315,7 @@ export default function App() {
 
                 {/* Ghost Entry for "To Sort" */}
                 {COLUMNS[activeColIndex] === 'To Sort' && (
-                  <button onClick={() => setQuickNoteOpen(true)} className="w-full border-2 border-dashed border-border-default rounded-2xl p-4 text-text-muted flex items-center justify-center space-x-2 hover:bg-raised hover:border-accent-amber transition-colors">
+                  <button onClick={() => setQuickNoteOpen(true)} className="w-full border-2 border-dashed border-default rounded-2xl p-4 text-muted flex items-center justify-center space-x-2 hover:bg-raised hover:border-accent-amber transition-colors">
                     <Plus className="w-5 h-5" />
                     <span className="font-bold">Raw Brain Dump</span>
                   </button>
@@ -323,7 +323,7 @@ export default function App() {
 
                 {/* Task Cards */}
                 {activeTasks.length === 0 && COLUMNS[activeColIndex] !== 'To Sort' && (
-                  <div className="mt-10 flex flex-col items-center text-text-faint space-y-2">
+                  <div className="mt-10 flex flex-col items-center text-faint space-y-2">
                     <CheckCircle2 className="w-10 h-10 opacity-20" />
                     <p className="text-sm font-bold">Zone Clear</p>
                   </div>
@@ -342,28 +342,28 @@ export default function App() {
 
                     <div className="flex justify-between items-start mb-3 pl-2">
                       <div>
-                        <h3 className="font-bold text-text-primary">{task.title}</h3>
+                        <h3 className="font-bold text-primary">{task.title}</h3>
                         {task.tags?.length > 0 && (
                           <div className="flex gap-1 mt-1">
-                            {task.tags.map(t => <span key={t} className="text-[9px] bg-raised text-text-muted px-1.5 py-0.5 rounded">{t}</span>)}
+                            {task.tags.map(t => <span key={t} className="text-[9px] bg-raised text-muted px-1.5 py-0.5 rounded">{t}</span>)}
                           </div>
                         )}
                       </div>
 
                       {COLUMNS[activeColIndex] !== 'To Sort' ? (
-                        <button onClick={() => completeTask(task.id)} className="w-7 h-7 shrink-0 rounded-full border-2 border-border-default flex items-center justify-center hover:bg-accent-secondary hover:border-accent-secondary transition-colors group ml-3">
+                        <button onClick={() => completeTask(task.id)} className="w-7 h-7 shrink-0 rounded-full border-2 border-default flex items-center justify-center hover:bg-accent-secondary hover:border-accent-secondary transition-colors group ml-3">
                           <CheckCircle2 className="w-4 h-4 text-transparent group-hover:text-white" />
                         </button>
                       ) : (
-                        <button onClick={() => openWizard(task)} className="text-[10px] bg-accent-amber/20 text-accent-amber-text font-bold border border-accent-amber-dim px-2 py-1 rounded ml-3 shrink-0">Prioritize</button>
+                        <button onClick={() => openWizard(task)} className="text-[10px] bg-accent-amber/20 text-accent-amber font-bold border border-accent-amber-dim px-2 py-1 rounded ml-3 shrink-0">Prioritize</button>
                       )}
                     </div>
 
                     <div className="flex space-x-2 text-xs pl-2">
-                      <span className="bg-base text-accent-secondary-text px-2 py-1 rounded border border-subtle font-bold flex items-center">
+                      <span className="bg-base text-accent-secondary px-2 py-1 rounded border border-subtle font-bold flex items-center">
                         RICE: {calculateScore(task.reach, task.impact, task.confidence, task.effort)}
                       </span>
-                      <span className={`px-2 py-1 rounded border font-bold ${task.moscow === 'Must' ? 'bg-accent-primary/30 border-accent-primary text-accent-primary-text' : 'bg-base border-subtle text-text-muted'}`}>
+                      <span className={`px-2 py-1 rounded border font-bold ${task.moscow === 'Must' ? 'bg-accent-primary/30 border-accent-primary text-accent-primary' : 'bg-base border-subtle text-muted'}`}>
                         {task.moscow}
                       </span>
                     </div>
@@ -374,10 +374,10 @@ export default function App() {
               {/* The "Peek" Mechanic */}
               {activeColIndex < COLUMNS.length - 1 && (
                 <div
-                  className="w-[15px] h-full bg-gradient-to-l from-bg-raised/80 to-transparent border-l border-border-default/50 flex flex-col justify-center items-center cursor-pointer backdrop-blur-sm"
+                  className="w-[15px] h-full bg-gradient-to-l from-bg-raised/80 to-transparent border-l border-default/50 flex flex-col justify-center items-center cursor-pointer backdrop-blur-sm"
                   onClick={() => setActiveColIndex(c => c + 1)}
                 >
-                  <ChevronRight className="text-text-faint/50 w-3 h-3 -ml-1" />
+                  <ChevronRight className="text-faint/50 w-3 h-3 -ml-1" />
                 </div>
               )}
             </div>
@@ -387,7 +387,7 @@ export default function App() {
 
       {/* --- BOTTOM NAVIGATION DOCK --- */}
       <nav className="absolute bottom-0 w-full bg-surface border-t border-subtle pb-safe pt-2 px-8 flex justify-between items-center z-20" style={{ boxShadow: `0 -10px 40px var(--shadow-nav)` }}>
-        <button onClick={() => {setActiveTab('home'); setGlobalMenuOpen(false);}} className={`flex flex-col items-center p-2 transition-colors ${activeTab === 'home' ? 'text-accent-secondary-text' : 'text-text-faint'}`}>
+        <button onClick={() => {setActiveTab('home'); setGlobalMenuOpen(false);}} className={`flex flex-col items-center p-2 transition-colors ${activeTab === 'home' ? 'text-accent-secondary' : 'text-faint'}`}>
           <Home className="w-6 h-6 mb-1" />
           <span className="text-[9px] uppercase font-bold tracking-widest">Home</span>
         </button>
@@ -403,7 +403,7 @@ export default function App() {
           </button>
         </div>
 
-        <button onClick={() => {setActiveTab('tasks'); setGlobalMenuOpen(false);}} className={`flex flex-col items-center p-2 transition-colors ${activeTab === 'tasks' ? 'text-accent-primary-text' : 'text-text-faint'}`}>
+        <button onClick={() => {setActiveTab('tasks'); setGlobalMenuOpen(false);}} className={`flex flex-col items-center p-2 transition-colors ${activeTab === 'tasks' ? 'text-accent-primary' : 'text-faint'}`}>
           <LayoutList className="w-6 h-6 mb-1" />
           <span className="text-[9px] uppercase font-bold tracking-widest">Tasks</span>
         </button>
@@ -413,16 +413,16 @@ export default function App() {
       {globalMenuOpen && (
         <div className="absolute inset-0 bg-base/80 backdrop-blur-sm z-10 flex flex-col justify-end items-center pb-28 px-6 animate-in fade-in">
           <div className="space-y-4 w-full max-w-xs">
-            <button onClick={() => openWizard()} className="w-full bg-surface border border-border-default text-white font-bold p-4 rounded-2xl flex items-center justify-center space-x-3 shadow-lg hover:border-accent-primary transition-colors">
+            <button onClick={() => openWizard()} className="w-full bg-surface border border-default text-white font-bold p-4 rounded-2xl flex items-center justify-center space-x-3 shadow-lg hover:border-accent-primary transition-colors">
               <Target className="text-accent-primary w-5 h-5" />
               <span>New Priority Task</span>
             </button>
-            <button onClick={() => {setGlobalMenuOpen(false); setQuickNoteOpen(true);}} className="w-full bg-surface border border-border-default text-white font-bold p-4 rounded-2xl flex items-center justify-center space-x-3 shadow-lg hover:border-accent-amber transition-colors">
-              <Zap className="text-accent-amber-text w-5 h-5" />
+            <button onClick={() => {setGlobalMenuOpen(false); setQuickNoteOpen(true);}} className="w-full bg-surface border border-default text-white font-bold p-4 rounded-2xl flex items-center justify-center space-x-3 shadow-lg hover:border-accent-amber transition-colors">
+              <Zap className="text-accent-amber w-5 h-5" />
               <span>Quick Note (To Sort)</span>
             </button>
-            <button onClick={() => {setGlobalMenuOpen(false); setOnboardingOpen(true);}} className="w-full bg-surface border border-border-default text-white font-bold p-4 rounded-2xl flex items-center justify-center space-x-3 shadow-lg hover:border-accent-tertiary transition-colors">
-              <Briefcase className="text-accent-tertiary-text w-5 h-5" />
+            <button onClick={() => {setGlobalMenuOpen(false); setOnboardingOpen(true);}} className="w-full bg-surface border border-default text-white font-bold p-4 rounded-2xl flex items-center justify-center space-x-3 shadow-lg hover:border-accent-tertiary transition-colors">
+              <Briefcase className="text-accent-tertiary w-5 h-5" />
               <span>New Project</span>
             </button>
           </div>
@@ -433,8 +433,8 @@ export default function App() {
       {quickNoteOpen && (
         <div className="absolute inset-0 bg-base/95 backdrop-blur-md z-50 flex flex-col p-6 animate-in slide-in-from-bottom-4">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-xl font-bold text-accent-amber-text flex items-center"><Zap className="mr-2"/> Brain Dump</h2>
-            <button onClick={() => setQuickNoteOpen(false)} className="text-text-muted p-2"><X /></button>
+            <h2 className="text-xl font-bold text-accent-amber flex items-center"><Zap className="mr-2"/> Brain Dump</h2>
+            <button onClick={() => setQuickNoteOpen(false)} className="text-muted p-2"><X /></button>
           </div>
           <textarea
             autoFocus
@@ -454,22 +454,22 @@ export default function App() {
         <div className="absolute inset-0 bg-base z-50 flex flex-col justify-center p-8 animate-in zoom-in-95">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-accent-tertiary-alt to-accent-primary mb-2">New Project</h2>
-            <p className="text-text-muted text-sm">A 10-second start to maintain focus.</p>
+            <p className="text-muted text-sm">A 10-second start to maintain focus.</p>
           </div>
           <div className="space-y-6">
             <div>
-              <label className="text-xs font-bold text-text-faint uppercase tracking-widest ml-1 mb-1 block">Project Name</label>
-              <input type="text" value={projectForm.name} onChange={e => setProjectForm({...projectForm, name: e.target.value})} placeholder="e.g. DeFi Wallet" className="w-full bg-surface border-b-2 border-border-default focus:border-accent-tertiary outline-none px-3 py-4 text-xl text-white rounded-t-xl transition-colors"/>
+              <label className="text-xs font-bold text-faint uppercase tracking-widest ml-1 mb-1 block">Project Name</label>
+              <input type="text" value={projectForm.name} onChange={e => setProjectForm({...projectForm, name: e.target.value})} placeholder="e.g. DeFi Wallet" className="w-full bg-surface border-b-2 border-default focus:border-accent-tertiary outline-none px-3 py-4 text-xl text-white rounded-t-xl transition-colors"/>
             </div>
             <div>
-              <label className="text-xs font-bold text-text-faint uppercase tracking-widest ml-1 mb-1 block">Core Mission (One sentence)</label>
-              <input type="text" value={projectForm.mission} onChange={e => setProjectForm({...projectForm, mission: e.target.value})} placeholder="Why are we building this?" className="w-full bg-surface border-b-2 border-border-default focus:border-accent-tertiary outline-none px-3 py-4 text-lg text-white rounded-t-xl transition-colors"/>
+              <label className="text-xs font-bold text-faint uppercase tracking-widest ml-1 mb-1 block">Core Mission (One sentence)</label>
+              <input type="text" value={projectForm.mission} onChange={e => setProjectForm({...projectForm, mission: e.target.value})} placeholder="Why are we building this?" className="w-full bg-surface border-b-2 border-default focus:border-accent-tertiary outline-none px-3 py-4 text-lg text-white rounded-t-xl transition-colors"/>
             </div>
             <button onClick={createProject} className="w-full bg-accent-tertiary text-white font-bold py-4 rounded-xl mt-8 active:scale-95 transition-transform" style={{ boxShadow: `0 4px 20px var(--accent-tertiary-bg-dim)` }}>
               Start Building
             </button>
             {projects.length > 0 && (
-              <button onClick={() => setOnboardingOpen(false)} className="w-full text-text-faint text-sm mt-4 p-2">Cancel</button>
+              <button onClick={() => setOnboardingOpen(false)} className="w-full text-faint text-sm mt-4 p-2">Cancel</button>
             )}
           </div>
         </div>
@@ -478,15 +478,15 @@ export default function App() {
       {vaultOpen && (
         <div className="absolute inset-0 bg-base/95 backdrop-blur-md z-40 flex flex-col p-6 animate-in slide-in-from-top-4">
           <div className="flex justify-between items-center mb-8 pt-4">
-            <h2 className="text-2xl font-bold text-white flex items-center"><Folder className="mr-2 text-accent-tertiary-text"/> The Vault</h2>
-            <button onClick={() => setVaultOpen(false)} className="text-text-muted p-2"><X /></button>
+            <h2 className="text-2xl font-bold text-white flex items-center"><Folder className="mr-2 text-accent-tertiary"/> The Vault</h2>
+            <button onClick={() => setVaultOpen(false)} className="text-muted p-2"><X /></button>
           </div>
-          <p className="text-sm text-text-muted mb-4">Switching projects will refocus your dashboard. Only one active project allowed.</p>
+          <p className="text-sm text-muted mb-4">Switching projects will refocus your dashboard. Only one active project allowed.</p>
           <div className="space-y-3">
             {projects.map(p => (
-              <div key={p.id} onClick={() => {setActiveProjectId(p.id); setVaultOpen(false);}} className={`p-4 rounded-2xl border cursor-pointer transition-colors ${p.id === activeProjectId ? 'bg-accent-tertiary/20 border-accent-tertiary' : 'bg-surface border-subtle hover:border-border-strong'}`}>
-                <h3 className={`font-bold ${p.id === activeProjectId ? 'text-accent-tertiary-text' : 'text-text-primary'}`}>{p.name}</h3>
-                <p className="text-xs text-text-faint mt-1 truncate">{p.mission}</p>
+              <div key={p.id} onClick={() => {setActiveProjectId(p.id); setVaultOpen(false);}} className={`p-4 rounded-2xl border cursor-pointer transition-colors ${p.id === activeProjectId ? 'bg-accent-tertiary/20 border-accent-tertiary' : 'bg-surface border-subtle hover:border-strong'}`}>
+                <h3 className={`font-bold ${p.id === activeProjectId ? 'text-accent-tertiary' : 'text-primary'}`}>{p.name}</h3>
+                <p className="text-xs text-faint mt-1 truncate">{p.mission}</p>
               </div>
             ))}
           </div>
@@ -498,7 +498,7 @@ export default function App() {
         <div className="absolute inset-0 bg-base/95 backdrop-blur-xl z-50 flex flex-col p-4 animate-in slide-in-from-bottom-full overflow-hidden">
           <div className="flex justify-between items-center mb-4 pt-2">
             <h2 className="text-xl font-bold text-white flex items-center"><Target className="w-5 h-5 mr-2 text-accent-primary"/> Priority Wizard</h2>
-            <button onClick={() => setWizardOpen(false)} className="text-text-muted p-2"><X /></button>
+            <button onClick={() => setWizardOpen(false)} className="text-muted p-2"><X /></button>
           </div>
 
           <div className="flex-1 overflow-y-auto space-y-6 pb-24 hide-scrollbar px-2">
@@ -507,14 +507,14 @@ export default function App() {
             <div className="space-y-3">
               <input
                 type="text" placeholder="Goal Name..." value={wizardForm.title} onChange={e => setWizardForm({...wizardForm, title: e.target.value})}
-                className="w-full bg-transparent border-b-2 border-border-default focus:border-accent-primary outline-none py-2 text-2xl font-bold text-white transition-colors"
+                className="w-full bg-transparent border-b-2 border-default focus:border-accent-primary outline-none py-2 text-2xl font-bold text-white transition-colors"
               />
               <div className="flex flex-wrap gap-2 items-center">
 
               <div>
-              <label className="text-[10px] text-text-faint font-bold uppercase tracking-widest mb-1 px-1 block">Quick Tags</label>
+              <label className="text-[10px] text-faint font-bold uppercase tracking-widest mb-1 px-1 block">Quick Tags</label>
                 {QUICK_TAGS.map(tag => (
-                  <button key={tag} onClick={() => toggleTag(tag)} className={`text-[10px] px-2 py-1 mx-0.5 rounded-full border transition-colors ${wizardForm.tags.includes(tag) ? 'bg-accent-primary border-accent-primary text-white' : 'bg-surface border-border-default text-text-muted hover:border-border-strong'}`}>
+                  <button key={tag} onClick={() => toggleTag(tag)} className={`text-[10px] px-2 py-1 mx-0.5 rounded-full border transition-colors ${wizardForm.tags.includes(tag) ? 'bg-accent-primary border-accent-primary text-white' : 'bg-surface border-default text-muted hover:border-strong'}`}>
                     + {tag}
                   </button>
                 ))}
@@ -542,7 +542,7 @@ export default function App() {
                         setCustomTagInput('');
                       }
                     }}
-                    className="bg-transparent border-b border-border-default text-[10px] text-text-secondary outline-none focus:border-accent-primary w-20 px-1 py-0.5 placeholder:text-text-faint"
+                    className="bg-transparent border-b border-default text-[10px] text-secondary outline-none focus:border-accent-primary w-20 px-1 py-0.5 placeholder:text-faint"
                   />
                   {customTagInput.trim() && (
                     <button
@@ -552,7 +552,7 @@ export default function App() {
                         }
                         setCustomTagInput('');
                       }}
-                      className="text-[10px] text-accent-primary-text font-bold px-1"
+                      className="text-[10px] text-accent-primary font-bold px-1"
                     >
                       Add
                     </button>
@@ -569,26 +569,26 @@ export default function App() {
               </div>
               <div className="flex justify-between items-end mt-2">
                 <div>
-                  <p className="text-[10px] text-text-faint uppercase tracking-widest font-bold mb-1">Calculated Tier</p>
-                  <p className={`text-xl font-black uppercase ${predictedColumn === 'High' ? 'text-accent-primary' : predictedColumn === 'Med' ? 'text-priority-med-text' : predictedColumn === 'Later' ? 'text-text-faint' : 'text-priority-low-text'}`}>
+                  <p className="text-[10px] text-faint uppercase tracking-widest font-bold mb-1">Calculated Tier</p>
+                  <p className={`text-xl font-black uppercase ${predictedColumn === 'High' ? 'text-accent-primary' : predictedColumn === 'Med' ? 'text-priority-med' : predictedColumn === 'Later' ? 'text-faint' : 'text-priority-low'}`}>
                     {predictedColumn} Priority
                   </p>
                 </div>
                 <div className="text-right">
-                  <span className="text-2xl font-black text-text-primary">{currentScore}</span>
-                  <span className="text-xs text-text-faint ml-1 block">RICE Pts</span>
+                  <span className="text-2xl font-black text-primary">{currentScore}</span>
+                  <span className="text-xs text-faint ml-1 block">RICE Pts</span>
                 </div>
               </div>
             </div>
 
             {/* MoSCoW Toggles */}
             <div>
-              <label className="text-[10px] text-text-faint font-bold uppercase tracking-widest mb-2 block">MoSCoW Filter (Overrides RICE)</label>
+              <label className="text-[10px] text-faint font-bold uppercase tracking-widest mb-2 block">MoSCoW Filter (Overrides RICE)</label>
               <div className="flex bg-surface rounded-xl p-1 border border-subtle">
                 {['Must', 'Should', 'Could', "Won't"].map(m => (
                   <button
                     key={m} onClick={() => setWizardForm({...wizardForm, moscow: m})}
-                    className={`flex-1 py-3 text-xs font-bold rounded-lg transition-all ${wizardForm.moscow === m ? (m === 'Must' ? 'bg-accent-primary-dark text-white' : m === "Won't" ? 'bg-overlay text-text-secondary' : 'bg-raised text-white shadow-md') : 'text-text-faint hover:text-text-secondary'}`}
+                    className={`flex-1 py-3 text-xs font-bold rounded-lg transition-all ${wizardForm.moscow === m ? (m === 'Must' ? 'bg-accent-primary-dark text-white' : m === "Won't" ? 'bg-overlay text-secondary' : 'bg-raised text-white shadow-md') : 'text-faint hover:text-secondary'}`}
                   >
                     {m}
                   </button>
@@ -599,17 +599,17 @@ export default function App() {
             {/* RICE Sliders (Fibonacci) */}
             <div className="space-y-3">
               <div className="flex items-center space-x-2 mb-1">
-                <label className="text-[10px] text-text-faint font-bold uppercase tracking-widest block">RICE Estimation (Fibonacci Scale)</label>
-                <button onClick={() => setWizardForm({...wizardForm, infoOpen: wizardForm.infoOpen === 'fibonacci' ? null : 'fibonacci'})} className="text-text-faint hover:text-accent-secondary-text transition-colors">
+                <label className="text-[10px] text-faint font-bold uppercase tracking-widest block">RICE Estimation (Fibonacci Scale)</label>
+                <button onClick={() => setWizardForm({...wizardForm, infoOpen: wizardForm.infoOpen === 'fibonacci' ? null : 'fibonacci'})} className="text-faint hover:text-accent-secondary transition-colors">
                   <HelpCircle className="w-3.5 h-3.5" />
                 </button>
               </div>
 
               {wizardForm.infoOpen === 'fibonacci' && (
-                <div className="mb-2 text-[10px] text-text-secondary bg-raised p-3 rounded-lg border border-border-default relative">
-                  <div className="absolute -top-1 left-[150px] w-2 h-2 bg-raised border-t border-l border-border-default transform rotate-45"></div>
-                  <span className="font-bold text-accent-secondary-text block mb-0.5">Why jump? (1, 2, 3, 5, 8)</span>
-                  <span className="text-text-secondary">As tasks get bigger, they get harder to estimate. This scale removes "false precision". If it feels bigger than a 3, jump to 5 to avoid debating small differences.</span>
+                <div className="mb-2 text-[10px] text-secondary bg-raised p-3 rounded-lg border border-default relative">
+                  <div className="absolute -top-1 left-[150px] w-2 h-2 bg-raised border-t border-l border-default transform rotate-45"></div>
+                  <span className="font-bold text-accent-secondary block mb-0.5">Why jump? (1, 2, 3, 5, 8)</span>
+                  <span className="text-secondary">As tasks get bigger, they get harder to estimate. This scale removes "false precision". If it feels bigger than a 3, jump to 5 to avoid debating small differences.</span>
                 </div>
               )}
 
@@ -617,19 +617,19 @@ export default function App() {
                 <div key={metric} className="bg-surface p-4 rounded-2xl border border-subtle">
                   <div className="flex justify-between items-center mb-3">
                     <div className="flex items-center space-x-2">
-                      <label className="text-sm font-bold text-text-primary capitalize">{metric}</label>
-                      <button onClick={() => setWizardForm({...wizardForm, infoOpen: wizardForm.infoOpen === metric ? null : metric})} className="text-text-faint hover:text-accent-secondary-text transition-colors">
+                      <label className="text-sm font-bold text-primary capitalize">{metric}</label>
+                      <button onClick={() => setWizardForm({...wizardForm, infoOpen: wizardForm.infoOpen === metric ? null : metric})} className="text-faint hover:text-accent-secondary transition-colors">
                         <HelpCircle className="w-4 h-4" />
                       </button>
                     </div>
-                    <span className="text-accent-secondary-text font-black text-lg">{wizardForm[metric]}</span>
+                    <span className="text-accent-secondary font-black text-lg">{wizardForm[metric]}</span>
                   </div>
 
                   {wizardForm.infoOpen === metric && (
-                    <div className="mb-4 text-[10px] text-text-secondary bg-raised p-3 rounded-lg border border-border-default relative">
-                      <div className="absolute -top-1 left-20 w-2 h-2 bg-raised border-t border-l border-border-default transform rotate-45"></div>
-                      <span className="font-bold text-accent-secondary-text block mb-0.5">{RICE_HINTS[metric].title}</span>
-                      <span className="text-text-secondary">{RICE_HINTS[metric].desc}</span>
+                    <div className="mb-4 text-[10px] text-secondary bg-raised p-3 rounded-lg border border-default relative">
+                      <div className="absolute -top-1 left-20 w-2 h-2 bg-raised border-t border-l border-default transform rotate-45"></div>
+                      <span className="font-bold text-accent-secondary block mb-0.5">{RICE_HINTS[metric].title}</span>
+                      <span className="text-secondary">{RICE_HINTS[metric].desc}</span>
                     </div>
                   )}
 
@@ -637,7 +637,7 @@ export default function App() {
                     {FIBONACCI.map(val => (
                       <button
                         key={val} onClick={() => setWizardForm({...wizardForm, [metric]: val})}
-                        className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${wizardForm[metric] === val ? 'bg-accent-secondary text-text-inverted scale-110' : 'bg-surface border-2 border-border-default text-text-muted hover:border-border-strong'}`}
+                        className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${wizardForm[metric] === val ? 'bg-accent-secondary text-inverted scale-110' : 'bg-surface border-2 border-default text-muted hover:border-strong'}`}
                         style={wizardForm[metric] === val ? { boxShadow: `0 0 15px var(--shadow-selected)` } : undefined}
                       >
                         {val}
@@ -667,7 +667,7 @@ export default function App() {
               <h2 className="text-3xl mt-3 font-black text-transparent bg-clip-text bg-gradient-to-r from-accent-primary to-accent-tertiary-alt text-center">
                 Task Complete!
               </h2>
-              <p className="text-text-secondary mt-3 font-bold text-center">Way to go!</p>
+              <p className="text-secondary mt-3 font-bold text-center">Way to go!</p>
             </div>
           </div>
         </div>
