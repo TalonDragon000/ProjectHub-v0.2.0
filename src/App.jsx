@@ -651,7 +651,7 @@ export default function App() {
 
           {/* Sticky Save Button */}
           <div className="pt-4 bg-base border-t border-subtle absolute bottom-0 left-0 w-full px-4 pb-safe-bottom z-50">
-            <button onClick={saveWizard} className="w-full bg-gradient-to-r from-accent-primary to-accent-tertiary text-white font-black text-lg py-4 rounded-2xl active:scale-95 transition-transform mb-4" style={{ boxShadow: `0 4px 20px var(--accent-primary-shadow)` }}>
+            <button onClick={saveWizard} className="w-full bg-gradient-to-r from-accent-primary to-accent-tertiary text-white font-black text-lg py-4 rounded-2xl active:scale-95 transition-transform mb-4" style={{ boxShadow: `0 4px 20px var(--accent-primary)` }}>
               Commit to {predictedColumn} Priority
             </button>
           </div>
