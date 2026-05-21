@@ -2,74 +2,76 @@
 export default {
   content: [
     "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
+    "./src/**/*.{js,ts,jsx,tsx}", // Added tsx support
   ],
   theme: {
     extend: {
       colors: {
-        // Backgrounds
+        // Backgrounds & Core Board Layout
         'bg-base':    'var(--bg-base)',
         'bg-surface': 'var(--bg-surface)',
         'bg-raised':  'var(--bg-raised)',
         'bg-overlay': 'var(--bg-overlay)',
 
-        // Borders
+        // Unified Borders (Accessible via border-* and bg-*)
         'border-subtle':  'var(--border-subtle)',
         'border-default': 'var(--border-default)',
         'border-strong':  'var(--border-strong)',
 
-        // Text
+        // Text Tokens
         'text-primary':   'var(--text-primary)',
         'text-secondary': 'var(--text-secondary)',
         'text-muted':     'var(--text-muted)',
         'text-faint':     'var(--text-faint)',
         'text-inverted':  'var(--text-inverted)',
 
-        // Accent Primary
+        // Accent Primary (Pink)
         'accent-primary':       'var(--accent-primary)',
         'accent-primary-dark':  'var(--accent-primary-dark)',
         'accent-primary-text':  'var(--accent-primary-text)',
         'accent-primary-dim':   'var(--accent-primary-bg-dim)',
+        'accent-primary-border':'var(--accent-primary-border)',
 
-        // Accent Secondary
+        // Accent Secondary (Cyan)
         'accent-secondary':      'var(--accent-secondary)',
         'accent-secondary-text': 'var(--accent-secondary-text)',
+        'accent-secondary-dim':  'var(--accent-secondary-bg-dim)', // Added missing token
+        'accent-secondary-border':'var(--accent-secondary-border)',
 
-        // Accent Tertiary
+        // Accent Tertiary (Violet)
         'accent-tertiary':      'var(--accent-tertiary)',
         'accent-tertiary-alt':  'var(--accent-tertiary-alt)',
         'accent-tertiary-text': 'var(--accent-tertiary-text)',
         'accent-tertiary-dim':  'var(--accent-tertiary-bg-dim)',
+        'accent-tertiary-border':'var(--accent-tertiary-border)',
 
-        // Accent Amber
-        'accent-amber':      'var(--accent-amber)',
-        'accent-amber-text': 'var(--accent-amber-text)',
-        'accent-amber-dim':  'var(--accent-amber-bg-dim)',
+        // Accent Amber (Warnings/To-Sort Actions)
+        'accent-amber':            'var(--accent-amber)',
+        'accent-amber-text':       'var(--accent-amber-text)',
+        'accent-amber-dim':        'var(--accent-amber-bg-dim)',
+        'accent-amber-border':     'var(--accent-amber-border)',
+        'accent-amber-border-dim': 'var(--accent-amber-border-dim)',
 
-        // Priority
+        // Priority Matrix (Cleanly unifies bg-priority-*, text-priority-*, border-priority-*)
         'priority-high':        'var(--priority-high-bg)',
         'priority-high-text':   'var(--priority-high-text)',
+        'priority-high-border': 'var(--priority-high-border)',
+        'priority-high-dim':    'var(--priority-high-bg-dim)', // Added asymmetric token
+
         'priority-med':         'var(--priority-med-bg)',
         'priority-med-text':    'var(--priority-med-text)',
+        'priority-med-border':  'var(--priority-med-border)',
         'priority-med-dim':     'var(--priority-med-bg-dim)',
+
         'priority-low':         'var(--priority-low-bg)',
         'priority-low-text':    'var(--priority-low-text)',
+        'priority-low-border':  'var(--priority-low-border)',
+        'priority-low-dim':     'var(--priority-low-bg-dim)', // Added asymmetric token
+
         'priority-later':       'var(--priority-later-bg)',
         'priority-later-text':  'var(--priority-later-text)',
-      },
-      borderColor: {
-        'accent-primary':   'var(--accent-primary-border)',
-        'accent-secondary': 'var(--accent-secondary-border)',
-        'accent-tertiary':  'var(--accent-tertiary-border)',
-        'accent-amber':     'var(--accent-amber-border)',
-        'accent-amber-dim': 'var(--accent-amber-border-dim)',
-        'priority-high':    'var(--priority-high-border)',
-        'priority-med':     'var(--priority-med-border)',
-        'priority-low':     'var(--priority-low-border)',
-        'priority-later':   'var(--priority-later-border)',
-        'subtle':           'var(--border-subtle)',
-        'default':          'var(--border-default)',
-        'strong':           'var(--border-strong)',
+        'priority-later-border':'var(--priority-later-border)',
+        'priority-later-dim':   'var(--priority-later-bg-dim)', // Added asymmetric token
       },
     },
   },
