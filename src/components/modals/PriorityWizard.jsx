@@ -189,7 +189,7 @@ export default function PriorityWizard() {
       <div className="pt-4 bg-base border-t border-subtle absolute bottom-0 left-0 w-full px-4 pb-safe-bottom z-50">
         <button
           onClick={saveWizard}
-          className="w-full bg-gradient-to-r from-accent-primary to-accent-tertiary text-primary font-black text-lg py-4 rounded-2xl shadow-primary active:scale-95 transition-transform mb-4"
+          className="w-full bg-gradient-to-r from-accent-primary to-accent-tertiary text-inverted font-black text-lg py-4 rounded-2xl shadow-primary active:scale-95 transition-transform mb-4"
         >
           Commit to {predictedColumn} Priority
         </button>
