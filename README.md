@@ -21,13 +21,64 @@ ProjectHub eliminates feature-bloat anxiety and "gut-feeling" roadmap changes by
 | Layer | Technology | Description |
 | :--- | :--- | :--- |
 | **Framework** | React 18.3.1 | Component-based UI library for building the single-page application. |
-| **Build Tool** | Vite 5.3.1 | Fast local dev server and optimized production bundler. |
+| **Build Tool** | Vite 7.0.0 | Fast local dev server and optimized production bundler. |
 | **Styling** | Tailwind CSS 3.4.4 | Utility-first CSS framework for the Soft-Dark Synthwave theme. |
+| **Theming** | CSS Custom Properties (`themes.css`) | Centralized design token system for colors, surfaces, and priority ramps. Swap themes by changing one file. |
 | **Icons** | lucide-react 0.400.0 | Lightweight SVG icon library for all UI glyphs. |
 | **Confetti** | canvas-confetti (CDN) | Browser-native confetti burst on task completion. |
-| **Database** | Supabase (PostgreSQL) | Configured and ready; full persistence integration is in progress. |
+| **Storage** | `localStorage` (default) | Local-first, zero-account data persistence. All projects and tasks survive page reloads with no server required. Supabase adapter is stubbed and ready to activate for optional cloud sync. |
 | **Hosting** | Netlify | Static site deployment with SPA redirect rules via `netlify.toml`. |
 | **PWA** | Web App Manifest + Service Worker | Installable on mobile home screens with offline asset caching. |
+
+---
+
+## Project Structure
+
+```
+src/
+  constants.js              # Static config: COLUMNS, FIBONACCI, QUICK_TAGS, RICE_HINTS, seed data
+  lib/
+    rice.js                 # Pure functions: calculateScore(), predictColumn()
+    colors.js               # Theme helpers: getGaugeColor(), fireConfetti()
+  storage/
+    index.js                # Active adapter export — swap one import to change backend
+    localStorageAdapter.js  # Default: local, private, zero-account persistence
+  context/
+    AppContext.jsx           # All app state + actions, wired to the storage adapter
+  components/
+    AppHeader.jsx           # Project name bar and Vault trigger
+    BottomNav.jsx           # Three-button dock with floating action button
+    GlobalMenu.jsx          # Action overlay (New Task / Quick Note / New Project)
+    GoalToast.jsx           # Task completion celebration overlay
+    TaskCard.jsx            # Individual task card with RICE badge and complete button
+    modals/
+      PriorityWizard.jsx    # Full RICE + MoSCoW scoring modal
+      QuickNoteModal.jsx    # Brain dump textarea (routes to "To Sort")
+      VaultModal.jsx        # Project switcher drawer
+      OnboardingModal.jsx   # New project creation screen
+  views/
+    HomeDashboard.jsx       # Strategy Dashboard tab (progress, roadmap, devlog)
+    TasksWorkspace.jsx      # Kanban swipe tab (pagination, peek mechanics, task list)
+  App.jsx                   # Layout shell — imports and positions all components
+  main.jsx                  # React root, wraps tree in AppProvider
+  index.css                 # Tailwind directives and global resets
+  themes.css                # Design token definitions (CSS custom properties)
+```
+
+### Storage Adapter Interface
+
+All adapters implement four methods. Swapping the backend is a single-line change in `storage/index.js`:
+
+```js
+getProjects()         // → Project[]
+saveProjects(data)    // Project[] → void
+getTasks()            // → Task[]
+saveTasks(data)       // Task[] → void
+```
+
+Current adapters:
+- `localStorageAdapter` — live default, works in browser, Chrome extension, and Capacitor (mobile)
+- Supabase adapter — stubbed, activated when optional auth is introduced
 
 ---
 
@@ -65,21 +116,21 @@ Score = (Reach x Impact x Confidence) / Effort
 
 ---
 
-## Data Model (In-Memory)
+## Data Model
 
-All data is currently managed in React component state. Supabase integration is in progress. The current in-memory shape is:
+All data persists automatically to `localStorage` with no account or server required. The shape is identical whether using the local adapter or the future Supabase adapter.
 
 ### Projects
 | Field | Type | Description |
 | :--- | :--- | :--- |
-| `id` | `number` | Auto-incremented integer or `Date.now()` timestamp |
+| `id` | `number` | `Date.now()` timestamp used as unique identifier |
 | `name` | `string` | Project display name |
 | `mission` | `string` | One-sentence orientation/purpose statement |
 
 ### Tasks
 | Field | Type | Description |
 | :--- | :--- | :--- |
-| `id` | `number` | Auto-incremented integer or `Date.now()` timestamp |
+| `id` | `number` | `Date.now()` timestamp used as unique identifier |
 | `projectId` | `number` | References parent project `id` |
 | `title` | `string` | Outcome-based goal/task title |
 | `reach` | `number` | Fibonacci parameter (1 / 2 / 3 / 5 / 8) |
@@ -96,7 +147,7 @@ All data is currently managed in React component state. Supabase integration is 
 ## Local Development Setup
 
 ### Prerequisites
-* Node.js 18+ (LTS recommended)
+* Node.js 22+
 * NPM or Yarn
 
 ### Steps
@@ -108,7 +159,7 @@ All data is currently managed in React component state. Supabase integration is 
     npm install
     ```
 
-2. **Environment Setup:**
+2. **Environment Setup (optional — only needed for future Supabase sync):**
     Create a `.env` file at the project root:
     ```env
     VITE_SUPABASE_URL=your_supabase_project_url
@@ -131,9 +182,9 @@ All data is currently managed in React component state. Supabase integration is 
 
 ## Upcoming Roadmap
 
-* [ ] **Supabase Persistence:** Wire up full create/read/update for projects and tasks against the live PostgreSQL database.
-* [ ] **Device-Scoped Identity:** Zero-friction anonymous device identity using `localStorage` UUID seeding, with Supabase RLS policies scoped per device.
+* [x] **Local-First Data Persistence:** Projects and tasks survive page reloads automatically via `localStorage`. Zero account required. Works in browser, Chrome extension, and Capacitor (mobile) without modification.
+* [ ] **Optional Cloud Sync (Supabase):** Activate the stubbed Supabase storage adapter to enable cross-device sync. Designed as an opt-in upgrade — the app works fully without it.
+* [ ] **Optional Auth & Device Migration:** Lightweight sign-in layer to link a local dataset to a Supabase account, enabling migration to a new device. Sign out reverts to local-only mode seamlessly.
 * [ ] **Strategy Specs Panel:** Interactive configuration for project-specific target audiences (WHO / WHAT / WHY) inside the Home dashboard.
-* [ ] **Cross-Device Account Sync:** Opt-in authentication layer to transform anonymous device tokens into unified multi-device profiles.
 * [ ] **Project Velocity Analytics:** Visual telemetry tracing cycle execution speeds and milestone completion distributions over time.
 * [ ] **Stale-Task Browser Notifications:** Browser push notifications targeting high-priority goals lingering in an unexecuted column.
