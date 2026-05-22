@@ -37,7 +37,7 @@ export default function OnboardingModal() {
         </div>
         <button
           onClick={createProject}
-          className="w-full bg-accent-tertiary text-inverted font-bold py-4 rounded-xl mt-8 shadow-tertiary active:scale-95 transition-transform"
+          className="w-full bg-accent-tertiary text-primary font-bold py-4 rounded-xl mt-8 shadow-tertiary active:scale-95 transition-transform"
         >
           Start Building
         </button>
