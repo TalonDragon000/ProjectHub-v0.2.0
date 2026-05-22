@@ -20,7 +20,7 @@ export default function QuickNoteModal() {
         placeholder="Dump your idea here. We'll sort it later..."
         value={quickNoteText}
         onChange={e => setQuickNoteText(e.target.value)}
-        className="w-full flex-1 bg-surface border border-subtle rounded-2xl p-4 text-white outline-none focus:border-accent-amber resize-none"
+        className="w-full flex-1 bg-surface border border-subtle rounded-2xl p-4 text-primary outline-none focus:border-accent-amber resize-none"
       />
       <button
         onClick={saveQuickNote}
