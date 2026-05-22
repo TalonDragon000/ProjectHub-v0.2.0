@@ -22,7 +22,7 @@ export default function OnboardingModal() {
             value={projectForm.name}
             onChange={e => setProjectForm({ ...projectForm, name: e.target.value })}
             placeholder="e.g. DeFi Wallet"
-            className="w-full bg-surface border-b-2 border-default focus:border-accent-tertiary outline-none px-3 py-4 text-xl text-white rounded-t-xl transition-colors"
+            className="w-full bg-surface border-b-2 border-default focus:border-accent-tertiary outline-none px-3 py-4 text-xl text-primary rounded-t-xl transition-colors"
           />
         </div>
         <div>
@@ -32,12 +32,12 @@ export default function OnboardingModal() {
             value={projectForm.mission}
             onChange={e => setProjectForm({ ...projectForm, mission: e.target.value })}
             placeholder="Why are we building this?"
-            className="w-full bg-surface border-b-2 border-default focus:border-accent-tertiary outline-none px-3 py-4 text-lg text-white rounded-t-xl transition-colors"
+            className="w-full bg-surface border-b-2 border-default focus:border-accent-tertiary outline-none px-3 py-4 text-lg text-primary rounded-t-xl transition-colors"
           />
         </div>
         <button
           onClick={createProject}
-          className="w-full bg-accent-tertiary text-white font-bold py-4 rounded-xl mt-8 shadow-tertiary active:scale-95 transition-transform"
+          className="w-full bg-accent-tertiary text-primary font-bold py-4 rounded-xl mt-8 shadow-tertiary active:scale-95 transition-transform"
         >
           Start Building
         </button>
