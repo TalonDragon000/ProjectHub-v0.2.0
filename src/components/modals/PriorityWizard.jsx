@@ -52,7 +52,7 @@ export default function PriorityWizard() {
                 <button
                   key={tag}
                   onClick={() => toggleTag(tag)}
-                  className="text-[10px] px-2 py-1 rounded-full border bg-accent-primary border-accent-primary text-primary transition-colors"
+                  className="text-[10px] px-2 py-1 rounded-full border bg-accent-primary border-accent-primary text-inverted transition-colors"
                 >
                   + {tag} ×
                 </button>
