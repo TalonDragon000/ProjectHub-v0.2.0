@@ -26,7 +26,7 @@ export default function BottomNav() {
 
       <button
         onClick={() => { setActiveTab('tasks'); setGlobalMenuOpen(false); }}
-        className={`flex flex-col items-center p-2 transition-colors ${activeTab === 'tasks' ? 'text-accent-primary' : 'text-faint'}`}
+        className={`flex flex-col items-center p-2 transition-colors ${activeTab === 'tasks' ? 'text-accent-inverted' : 'text-faint'}`}
       >
         <LayoutList className="w-6 h-6 mb-1" />
         <span className="text-[9px] uppercase font-bold tracking-widest">Tasks</span>
