@@ -115,9 +115,6 @@ export default function TaskViewModal() {
               <p className={`text-xl font-black uppercase ${t.column === 'High' ? 'text-accent-primary' : t.column === 'Med' ? 'text-priority-med' : t.column === 'Later' ? 'text-faint' : 'text-priority-low'}`}>
                 {t.column} Priority
               </p>
-                <span class="hidden group-hover:block text-sm text-primary-600 animate-in fade-in duration-300"> 
-                Edit
-                </span>
               </button>
             </div>
             <div className="text-right">
