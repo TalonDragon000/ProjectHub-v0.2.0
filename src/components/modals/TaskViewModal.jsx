@@ -98,7 +98,7 @@ export default function TaskViewModal() {
         <div className="border-t border-subtle" />
 
         {/* RICE Score gauge */}
-        <div className="RICESummary bg-surface rounded-2xl border border-subtle p-5 relative overflow-hidden">
+        <div className="bg-surface rounded-2xl border border-subtle p-5 relative overflow-hidden">
           <div className="absolute top-0 left-0 h-1 w-full bg-raised">
             <div
               className={`h-full transition-all duration-500 ${getGaugeColor(t.column)}`}
@@ -106,13 +106,11 @@ export default function TaskViewModal() {
             />
           </div>
           <div className="flex justify-between items-end mt-2 mb-4">
-            <button
-              onClick={handlePrioritize}>
+            <div>
               <p className="text-[10px] text-faint uppercase tracking-widest font-bold mb-1">Priority Tier</p>
               <p className={`text-xl font-black uppercase ${t.column === 'High' ? 'text-accent-primary' : t.column === 'Med' ? 'text-priority-med' : t.column === 'Later' ? 'text-faint' : 'text-priority-low'}`}>
                 {t.column} Priority
               </p>
-            </button>
             </div>
             <div className="text-right">
               <span className="text-2xl font-black text-primary">{score}</span>
