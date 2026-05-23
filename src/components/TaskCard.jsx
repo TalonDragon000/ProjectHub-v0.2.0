@@ -60,21 +60,7 @@ export default function TaskCard({ task }) {
         <div className="fixed inset-0 z-30" onClick={closeMenu} />
       )}
 
-      <div
-        onClick={handleCardClick}
-        className="bg-surface rounded-2xl p-4 border border-subtle shadow-xl transition-all duration-150 hover:shadow-2xl hover:border-default cursor-pointer relative overflow-hidden"
-      >
-        <div className={`absolute left-0 top-0 bottom-0 w-1 ${getGaugeColor(task.column)}`} />
-
-        <button
-          onClick={openMenu}
-          className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-lg text-faint opacity-0 group-hover:opacity-100 hover:bg-raised hover:text-primary transition-all duration-150 z-10"
-          aria-label="Task options"
-        >
-          <MoreHorizontal className="w-4 h-4" />
-        </button>
-
-        {menuOpen && (
+              {menuOpen && (
           <div className="absolute top-10 right-3 z-40 bg-surface border border-subtle rounded-xl shadow-2xl overflow-hidden min-w-[160px] animate-in fade-in-0 zoom-in-95 duration-100">
             <button
               onClick={handleView}
@@ -109,6 +95,20 @@ export default function TaskCard({ task }) {
             </button>
           </div>
         )}
+
+      <div
+        onClick={handleCardClick}
+        className="bg-surface rounded-2xl p-4 border border-subtle shadow-xl transition-all duration-150 hover:shadow-2xl hover:border-default cursor-pointer relative overflow-hidden"
+      >
+        <div className={`absolute left-0 top-0 bottom-0 w-1 ${getGaugeColor(task.column)}`} />
+
+        <button
+          onClick={openMenu}
+          className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-lg text-faint opacity-0 group-hover:opacity-100 hover:bg-raised hover:text-primary transition-all duration-150 z-10"
+          aria-label="Task options"
+        >
+          <MoreHorizontal className="w-4 h-4" />
+        </button>
 
         <div className="flex items-start mb-2 pl-2 pr-8">
           <div className="min-w-0 flex-1">
