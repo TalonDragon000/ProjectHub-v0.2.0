@@ -11,6 +11,7 @@ export const useApp = () => useContext(AppContext);
 const EMPTY_WIZARD = {
   title: '', description: '', reach: 3, impact: 3, confidence: 3, effort: 3,
   moscow: 'Should', infoOpen: null, tags: [],
+  specs: {who: '', what: '', why: '' }
 };
 
 const sortByRice = (taskList) =>
