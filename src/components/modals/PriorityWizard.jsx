@@ -107,7 +107,7 @@ export default function PriorityWizard() {
           <div className="flex justify-between items-end mt-2">
             <div>
               <p className="text-[10px] text-faint uppercase tracking-widest font-bold mb-1">Calculated Tier</p>
-              <p className={`text-xl font-black uppercase ${predictedColumn === 'High' ? 'text-accent-primary' : predictedColumn === 'Med' ? 'text-priority-med' : predictedColumn === 'Later' ? 'text-faint' : 'text-priority-low'}`}>
+              <p className={`text-xl font-black uppercase ${predictedColumn === 'High' ? 'text-priority-high' : predictedColumn === 'Med' ? 'text-priority-med' : predictedColumn === 'Later' ? 'text-faint' : 'text-priority-low'}`}>
                 {predictedColumn} Priority
               </p>
             </div>
