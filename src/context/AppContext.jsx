@@ -107,19 +107,26 @@ export function AppProvider({ children }) {
     setWizardOpen(true);
   };
 
-  const saveWizard = () => {
-    const score = calculateScore(wizardForm.reach, wizardForm.impact, wizardForm.confidence, wizardForm.effort);
-    const col = predictColumn(score, wizardForm.moscow);
-    if (editingTask) {
-      setTasks(prev => prev.map(t => t.id === editingTask ? { ...t, ...wizardForm, column: col } : t));
-    } else {
-      setTasks(prev => [
-        ...prev,
-        { id: Date.now(), projectId: activeProjectId, ...wizardForm, column: col, completed: false },
-      ]);
+const saveWizard = () => {
+  const score = calculateScore(wizardForm.reach, wizardForm.impact, wizardForm.confidence, wizardForm.effort);
+  const col = predictColumn(score, wizardForm.moscow);
+  const updatedFields = { ...wizardForm, column: col };
+
+  if (editingTask) {
+    setTasks(prev => prev.map(t =>
+      t.id === editingTask ? { ...t, ...updatedFields } : t
+    ));
+    if (viewingTask?.id === editingTask) {
+      setViewingTask(prev => ({ ...prev, ...updatedFields }));
     }
-    setWizardOpen(false);
-  };
+  } else {
+    setTasks(prev => [
+      ...prev,
+      { id: Date.now(), projectId: activeProjectId, ...updatedFields, completed: false },
+    ]);
+  }
+  setWizardOpen(false);
+};
 
   const openViewTask = (task) => {
     setViewingTask(task);
@@ -167,6 +174,14 @@ export function AppProvider({ children }) {
   const deleteTask = (id) => {
     setTasks(prev => prev.filter(t => t.id !== id));
   };
+
+  const updateTask = (updatedTask) => {
+  setTasks(prev => prev.map(t => t.id === updatedTask.id ? updatedTask : t));
+  // Keep viewingTask fresh so ViewModal reflects the save immediately
+  if (viewingTask?.id === updatedTask.id) {
+    setViewingTask(updatedTask);
+  }
+};
 
   const toggleTag = (tag) => {
     setWizardForm(prev => ({
