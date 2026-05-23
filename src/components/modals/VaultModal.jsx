@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Folder, X, Pin, PinOff, ArchiveRestore, ChevronDown, ChevronUp } from 'lucide-react';
+import { Folder, X, Pin, PinOff, ArchiveRestore, ChevronDown, ChevronUp, Plus } from 'lucide-react';
 import { useApp } from '../../context/AppContext.jsx';
 
 function ProjectRow({ project, isActive, onSelect, onPin }) {
@@ -68,6 +68,7 @@ export default function VaultModal() {
     activeProjectId, setActiveProjectId,
     activeProjects, archivedProjects,
     pinProject, restoreProject,
+    setOnboardingOpen,
   } = useApp();
 
   const [archiveExpanded, setArchiveExpanded] = useState(false);
@@ -95,7 +96,7 @@ export default function VaultModal() {
         One active project at a time. Pin favorites to keep them at the top.
       </p>
 
-      <div className="flex-1 overflow-y-auto space-y-6 pb-4">
+      <div className="flex-1 overflow-y-auto space-y-6 pb-20">
 
         {/* Active projects */}
         <section className="space-y-2">
@@ -149,6 +150,16 @@ export default function VaultModal() {
           </section>
         )}
 
+      </div>
+
+      {/* Floating new project button */}
+      <div className="absolute bottom-6 left-6 right-6">
+        <button
+          onClick={() => { setVaultOpen(false); setOnboardingOpen(true); }}
+          className="w-full flex items-center justify-center gap-2 bg-accent-tertiary text-inverted font-bold py-4 rounded-2xl shadow-tertiary active:scale-95 transition-transform"
+        >
+          <Plus className="w-4 h-4" /> New Project
+        </button>
       </div>
     </div>
   );

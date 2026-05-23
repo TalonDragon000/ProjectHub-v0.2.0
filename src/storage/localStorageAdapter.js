@@ -1,5 +1,3 @@
-import { INITIAL_PROJECTS, INITIAL_TASKS } from '../constants.js';
-
 const KEYS = {
   projects: 'projecthub_projects',
   tasks:    'projecthub_tasks',
@@ -15,8 +13,8 @@ const parse = (key, fallback) => {
 };
 
 export const localStorageAdapter = {
-  getProjects: () => parse(KEYS.projects, INITIAL_PROJECTS),
+  getProjects: () => parse(KEYS.projects, []),
   saveProjects: (data) => localStorage.setItem(KEYS.projects, JSON.stringify(data)),
-  getTasks: () => parse(KEYS.tasks, INITIAL_TASKS),
+  getTasks: () => parse(KEYS.tasks, []),
   saveTasks: (data) => localStorage.setItem(KEYS.tasks, JSON.stringify(data)),
 };

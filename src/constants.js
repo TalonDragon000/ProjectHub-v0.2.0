@@ -23,11 +23,9 @@ export const RICE_HINTS = {
   }
 };
 
-export const INITIAL_PROJECTS = [
-  { id: 1, name: 'Demo Project', mission: 'A sample setup for you to explore.', specs: { who: 'Founders & product teams', what: 'A mobile prioritization tool', why: 'Too many tasks, not enough clarity' }, pinned: false, archived: false }
-];
+export const DEMO_PROJECT = { id: 1, name: 'Demo Project', mission: 'A sample setup for you to explore the app.', specs: { who: 'Founders & product teams', what: 'A mobile prioritization tool', why: 'Too many tasks, not enough clarity' }, pinned: false, archived: false };
 
-export const INITIAL_TASKS = [
+export const DEMO_TASKS = [
   { id: 1, projectId: 1, title: 'Swipe to view next column', description: 'Swipe left or right on the task list to navigate between priority columns.', reach: 5, impact: 8, confidence: 5, effort: 3, moscow: 'Must', column: 'High', completed: false, tags: ['Feature'] },
   { id: 2, projectId: 1, title: 'Click "..." to open task options', description: 'Hover over a card and click the menu button to view, prioritize, complete, or delete a task.', reach: 8, impact: 5, confidence: 8, effort: 5, moscow: 'Should', column: 'Med', completed: false, tags: ['Marketing'] },
   { id: 3, projectId: 1, title: 'Complete task to archive', description: 'Completed tasks are moved to the Dev Log for future reference.', reach: 8, impact: 3, confidence: 3, effort: 8, moscow: 'Could', column: 'Low', completed: false, tags: ['Maintenance'] },

@@ -4,6 +4,39 @@ This file is the authoritative development history for Project Hub. It documents
 
 ---
 
+## v0.5.0 — Blank Slate First Run with Opt-In Demo
+**Status:** Shipped
+
+### What was built
+- **Blank slate first run:** Storage adapter now falls back to empty arrays instead of seeding with the demo project. New users arrive at a clean OnboardingModal with no pre-loaded data.
+- **Renamed seed data:** `INITIAL_PROJECTS` / `INITIAL_TASKS` in `constants.js` renamed to `DEMO_PROJECT` / `DEMO_TASKS`. These are now a static template, not a storage default. This makes the intent explicit — they describe a single loadable demo, not a list of "initial" records.
+- **`loadDemoProject()` action in AppContext:** Inserts `DEMO_PROJECT` and `DEMO_TASKS` into state only if the demo does not already exist (idempotent). Sets the demo as the active project and closes all modals. Idempotency check (`projects.some(p => p.id === DEMO_PROJECT.id)`) prevents duplicate seeding if the user navigates back to Onboarding after loading the demo once.
+- **OnboardingModal first-run variant:** Detects `projects.length === 0` and renders a welcome headline ("Project Hub") and tagline ("Prioritize ruthlessly. Ship what matters.") instead of the generic "New Project" heading. This gives brand context on the first open without adding a dedicated splash screen. The heading reverts to "New Project" on all subsequent opens.
+- **"Start Building" button disabled state:** Button is now disabled when the name field is empty, preventing submission of blank projects.
+- **Enter key shortcut:** Both name and mission inputs submit the form on Enter.
+- **"or explore the Demo Project first" link:** Muted text link rendered below the primary CTA only on first run (`isFirstRun`). Tapping it calls `loadDemoProject()`. Visually subordinate — no border, no background, smaller text — so it reads as an escape hatch, not a fork in the flow.
+- **"+ New Project" button in VaultModal:** Fixed-position teal button at the bottom of the Vault overlay. Closes the Vault and opens Onboarding. Provides a permanent project creation entry point from the navigation layer. Scroll content padded to `pb-20` to prevent list items from hiding behind the button.
+- **Cancel button condition corrected:** OnboardingModal Cancel now uses `!isFirstRun` (was `projects.length > 0`). These are equivalent but the explicit boolean reads more clearly alongside `isFirstRun`.
+
+### Key decisions
+
+**Why remove the seed data rather than hiding it?**
+Seeding storage with demo content on first run means every new user's first action is an escape attempt — figuring out how to replace or remove the demo before doing any real work. Blank slate respects the user's intent: they opened the app to create something, not to clean up sample data. The demo is preserved as an opt-in, not an opt-out, which is a fundamental shift in the relationship between the product and the user's attention.
+
+**Why keep the demo at all?**
+The demo provides orientation for users who are unfamiliar with RICE scoring, the column system, or the task card interactions. Rather than a long onboarding tutorial (which users skip) or tooltips (which appear too late), a populated demo project lets users click through a working example and form a mental model before committing to their own data. This is the "guided sample" opt-in pattern used by Notion, Linear, and Figma. The key constraint: it must be genuinely opt-in with no default path into it.
+
+**Why is the demo link visually subordinate?**
+If the "Explore Demo" option has the same visual weight as "Start Building," users read it as a required choice rather than an escape hatch. Hesitation increases. Many users will stop to wonder which option is "correct." Making it a small, muted text link (zero border, zero background fill, smaller font) signals that it is secondary — the primary action is already obvious. This matches how iOS's "Sign in with Apple" secondary option, or Stripe's "or use test data" link, are styled in onboarding flows.
+
+**Why is `loadDemoProject` idempotent?**
+A user could theoretically load the demo, archive it, return to Onboarding from GlobalMenu, and tap the demo link again. Without the idempotency check, a second `DEMO_PROJECT` entry with `id: 1` would be inserted, creating a duplicate. The check `projects.some(p => p.id === DEMO_PROJECT.id)` covers the archived case — the demo's id is still in storage even when archived, so it will not be re-inserted. The user is simply switched back to it (possibly with `archived: true`, which is a future edge case to handle if needed).
+
+**Why put "New Project" in VaultModal as a fixed button rather than a row item?**
+A list item at the top of the active projects list (e.g., a "+ Add project" row) blurs the line between navigation and creation. Users scanning the list for an existing project might click it accidentally, or it creates parsing friction ("is this a project or a button?"). A fixed button at the bottom with a distinct color and full-width tap target is unambiguous. It mirrors the FAB (Floating Action Button) pattern from Material Design, which has established user expectations for "create new thing" in a list context.
+
+---
+
 ## v0.4.0 — Project Lifecycle Management (Archive, Restore, Pin)
 **Status:** Shipped
 

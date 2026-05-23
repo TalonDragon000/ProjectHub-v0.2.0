@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useRef } from 'r
 import { storage } from '../storage/index.js';
 import { calculateScore, predictColumn } from '../lib/rice.js';
 import { fireConfetti } from '../lib/colors.js';
-import { COLUMNS } from '../constants.js';
+import { COLUMNS, DEMO_PROJECT, DEMO_TASKS } from '../constants.js';
 
 const AppContext = createContext(null);
 
@@ -196,6 +196,19 @@ const saveWizard = () => {
     setProjects(prev => prev.map(p => p.id === id ? { ...p, pinned: !p.pinned } : p));
   };
 
+  const loadDemoProject = () => {
+    // Only seed the demo if it does not already exist
+    const alreadyExists = projects.some(p => p.id === DEMO_PROJECT.id);
+    if (!alreadyExists) {
+      setProjects(prev => [...prev, DEMO_PROJECT]);
+      setTasks(prev => [...prev, ...DEMO_TASKS]);
+    }
+    setActiveProjectId(DEMO_PROJECT.id);
+    setOnboardingOpen(false);
+    setVaultOpen(false);
+    setActiveTab('home');
+  };
+
   const createProject = () => {
     if (!projectForm.name.trim()) return;
     const newProject = { id: Date.now(), specs: { who: '', what: '', why: '' }, pinned: false, archived: false, ...projectForm };
@@ -267,7 +280,7 @@ const saveWizard = () => {
     handleTouchStart, handleTouchEnd,
     // Actions
     openWizard, saveWizard, saveQuickNote, createProject, completeTask, deleteTask, updateTask, toggleTag,
-    archiveProject, restoreProject, pinProject,
+    archiveProject, restoreProject, pinProject, loadDemoProject,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
