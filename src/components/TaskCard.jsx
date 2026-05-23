@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MoveHorizontal as MoreHorizontal, Eye, Target, CircleCheck, Trash2 } from 'lucide-react';
+import { MoreHorizontal, Eye, Target, CircleCheck, Trash2 } from 'lucide-react';
 import { useApp } from '../context/AppContext.jsx';
 import { getGaugeColor } from '../lib/colors.js';
 import { calculateScore } from '../lib/rice.js';
