@@ -11,17 +11,13 @@ export default function TaskCard({ task }) {
 
   const inSortColumn = COLUMNS[activeColIndex] === 'To Sort';
 
-  const handleCardClick = () => {
-    if (menuOpen) return;
-    openViewTask(task);
-  };
-
+  const handleCardClick = () => { if (menuOpen) return; openViewTask(task); };
   const openMenu = (e) => { e.stopPropagation(); setMenuOpen(true); };
   const closeMenu = () => setMenuOpen(false);
 
   const handleView = (e) => { e.stopPropagation(); closeMenu(); openViewTask(task); };
   const handlePrioritize = (e) => { e.stopPropagation(); closeMenu(); openWizard(task); };
-  const handleComplete = (e) => { e.stopPropagation(); closeMenu(); completeTask(task.id); };
+  const handleComplete = (e) => { e.stopPropagation(); completeTask(task.id); };
   const handleDelete = (e) => { e.stopPropagation(); closeMenu(); deleteTask(task.id); };
 
   return (
@@ -30,7 +26,7 @@ export default function TaskCard({ task }) {
 
       {/* Dropdown — outside overflow-hidden card */}
       {menuOpen && (
-        <div className="absolute top-10 right-3 z-40 bg-surface border border-subtle rounded-xl shadow-2xl overflow-hidden min-w-[160px] animate-in fade-in-0 zoom-in-95 duration-100">
+        <div className="absolute top-8 left-2 z-40 bg-surface border border-subtle rounded-xl shadow-2xl overflow-hidden min-w-[160px] animate-in fade-in-0 zoom-in-95 duration-100">
           <button onClick={handleView} className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-secondary hover:bg-raised hover:text-primary transition-colors text-left">
             <Eye className="w-4 h-4 shrink-0" /> View
           </button>
@@ -44,58 +40,61 @@ export default function TaskCard({ task }) {
         </div>
       )}
 
+      {/* Card — flex row so complete column sits naturally beside content */}
       <div
         onClick={handleCardClick}
-        className="bg-surface rounded-2xl p-4 border border-subtle shadow-xl transition-all duration-150 hover:shadow-2xl hover:border-default cursor-pointer relative overflow-hidden"
+        className="bg-surface rounded-2xl border border-subtle shadow-xl transition-all duration-150 hover:shadow-2xl hover:border-default cursor-pointer flex overflow-hidden"
       >
-        <div className={`absolute left-0 top-0 bottom-0 w-1 ${getGaugeColor(task.column)}`} />
+        {/* Priority stripe */}
+        <div className={`w-1 shrink-0 ${getGaugeColor(task.column)}`} />
 
-        {/* Top-right controls */}
-        <div className="absolute top-3 right-3 flex items-center gap-1">
-          {/* Persistent complete — always visible, low-key until hover */}
-          {!inSortColumn && (
+        {/* Main content */}
+        <div className="flex-1 min-w-0 p-4">
+
+          {/* Title row — ... appears inline on hover */}
+          <div className="flex items-start gap-1 mb-1">
+            <h3 className="font-bold text-primary leading-snug flex-1 min-w-0">{task.title}</h3>
             <button
-              onClick={handleComplete}
-              className="w-7 h-7 flex items-center justify-center rounded-lg text-faint opacity-40 hover:opacity-100 hover:text-accent-secondary hover:bg-accent-secondary/10 transition-all duration-150"
-              aria-label="Mark complete"
+              onClick={openMenu}
+              className="shrink-0 w-6 h-6 flex items-center justify-center rounded-md text-faint opacity-0 group-hover:opacity-100 hover:bg-raised hover:text-primary transition-all duration-150 mt-0.5"
+              aria-label="Task options"
             >
-              <CircleCheck className="w-4 h-4" />
+              <MoreHorizontal className="w-3.5 h-3.5" />
             </button>
-          )}
-          {/* Overflow menu — visible on hover */}
-          <button
-            onClick={openMenu}
-            className="w-7 h-7 flex items-center justify-center rounded-lg text-faint opacity-0 group-hover:opacity-100 hover:bg-raised hover:text-primary transition-all duration-150 z-10"
-            aria-label="Task options"
-          >
-            <MoreHorizontal className="w-4 h-4" />
-          </button>
-        </div>
+          </div>
 
-        <div className="flex items-start mb-2 pl-2 pr-16">
-          <div className="min-w-0 flex-1">
-            <h3 className="font-bold text-primary leading-snug">{task.title}</h3>
-            {task.description && (
-              <p className="text-xs text-muted mt-0.5 leading-snug line-clamp-2">{task.description}</p>
-            )}
-            {task.tags?.length > 0 && (
-              <div className="flex flex-wrap gap-1 mt-1.5">
-                {task.tags.map(t => (
-                  <span key={t} className="text-[9px] bg-raised text-muted px-1.5 py-0.5 rounded">{t}</span>
-                ))}
-              </div>
-            )}
+          {task.description && (
+            <p className="text-xs text-muted leading-snug line-clamp-2 mb-2">{task.description}</p>
+          )}
+          {task.tags?.length > 0 && (
+            <div className="flex flex-wrap gap-1 mb-2">
+              {task.tags.map(t => (
+                <span key={t} className="text-[9px] bg-raised text-muted px-1.5 py-0.5 rounded">{t}</span>
+              ))}
+            </div>
+          )}
+
+          <div className="flex gap-2 text-xs">
+            <span className="bg-base text-accent-secondary px-2 py-1 rounded border border-subtle font-bold">
+              RICE: {calculateScore(task.reach, task.impact, task.confidence, task.effort)}
+            </span>
+            <span className={`px-2 py-1 rounded border font-bold ${task.moscow === 'Must' ? 'bg-accent-primary/30 border-accent-primary text-accent-primary' : 'bg-base border-subtle text-muted'}`}>
+              {task.moscow}
+            </span>
           </div>
         </div>
 
-        <div className="flex space-x-2 text-xs pl-2">
-          <span className="bg-base text-accent-secondary px-2 py-1 rounded border border-subtle font-bold flex items-center">
-            RICE: {calculateScore(task.reach, task.impact, task.confidence, task.effort)}
-          </span>
-          <span className={`px-2 py-1 rounded border font-bold ${task.moscow === 'Must' ? 'bg-accent-primary/30 border-accent-primary text-accent-primary' : 'bg-base border-subtle text-muted'}`}>
-            {task.moscow}
-          </span>
-        </div>
+        {/* Complete column — always visible, full card height */}
+        {!inSortColumn && (
+          <button
+            onClick={handleComplete}
+            className="shrink-0 w-14 flex flex-col items-center justify-center gap-1.5 border-l border-subtle text-faint hover:text-accent-secondary hover:bg-accent-secondary/10 transition-colors duration-150"
+            aria-label="Mark complete"
+          >
+            <CircleCheck className="w-5 h-5" />
+            <span className="text-[10px] font-bold">Complete</span>
+          </button>
+        )}
       </div>
     </div>
   );
