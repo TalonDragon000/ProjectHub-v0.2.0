@@ -30,7 +30,7 @@ export function AppProvider({ children }) {
 
   // --- Wizard form ---
   const [wizardForm, setWizardForm] = useState({
-    title: '', reach: 3, impact: 3, confidence: 3, effort: 3, moscow: 'Should', infoOpen: null, tags: []
+    title: '', reach: 3, impact: 3, confidence: 3, effort: 3, moscow: 'Should', infoOpen: null, tags: [], description: ''
   });
   const [customTagInput, setCustomTagInput] = useState('');
   const [editingTask, setEditingTask] = useState(null);
@@ -39,7 +39,7 @@ export function AppProvider({ children }) {
   const [projectForm, setProjectForm] = useState({ name: '', mission: '' });
 
   // --- Quick note ---
-  const [quickNoteText, setQuickNoteText] = useState('');
+  const [quickNoteText, setQuickNoteText] = useState(title: '', description: '');
 
   // --- Swipe refs (passed down to the main content area) ---
   const touchStartX = useRef(0);
