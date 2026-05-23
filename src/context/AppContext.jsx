@@ -8,6 +8,18 @@ const AppContext = createContext(null);
 
 export const useApp = () => useContext(AppContext);
 
+const EMPTY_WIZARD = {
+  title: '', description: '', reach: 3, impact: 3, confidence: 3, effort: 3,
+  moscow: 'Should', infoOpen: null, tags: [],
+};
+
+const sortByRice = (taskList) =>
+  [...taskList].sort((a, b) => {
+    const sa = parseFloat(calculateScore(a.reach, a.impact, a.confidence, a.effort));
+    const sb = parseFloat(calculateScore(b.reach, b.impact, b.confidence, b.effort));
+    return sb - sa;
+  });
+
 export function AppProvider({ children }) {
   // --- Core data ---
   const [projects, setProjectsState] = useState(() => storage.getProjects());
@@ -28,10 +40,12 @@ export function AppProvider({ children }) {
   const [quickNoteOpen, setQuickNoteOpen] = useState(false);
   const [goalToast, setGoalToast] = useState(false);
 
+  // --- View task modal ---
+  const [viewTaskOpen, setViewTaskOpen] = useState(false);
+  const [viewingTask, setViewingTask] = useState(null);
+
   // --- Wizard form ---
-  const [wizardForm, setWizardForm] = useState({
-    title: '', reach: 3, impact: 3, confidence: 3, effort: 3, moscow: 'Should', infoOpen: null, tags: [], description: ''
-  });
+  const [wizardForm, setWizardForm] = useState(EMPTY_WIZARD);
   const [customTagInput, setCustomTagInput] = useState('');
   const [editingTask, setEditingTask] = useState(null);
 
@@ -41,9 +55,8 @@ export function AppProvider({ children }) {
   // --- Quick note ---
   const [quickNoteText, setQuickNoteText] = useState('');
 
-  // --- Swipe refs (passed down to the main content area) ---
+  // --- Swipe refs ---
   const touchStartX = useRef(0);
-  const pressTimer = useRef(null);
 
   // --- Persist to storage on change ---
   const setProjects = (data) => {
@@ -61,7 +74,9 @@ export function AppProvider({ children }) {
   // --- Derived ---
   const activeProject = projects.find(p => p.id === activeProjectId);
   const projectTasks = tasks.filter(t => t.projectId === activeProjectId);
-  const activeTasks = projectTasks.filter(t => t.column === COLUMNS[activeColIndex] && !t.completed);
+  const activeTasks = sortByRice(
+    projectTasks.filter(t => t.column === COLUMNS[activeColIndex] && !t.completed)
+  );
   const completedTasks = projectTasks.filter(t => t.completed);
   const nowTasks = projectTasks.filter(t => t.column === 'High' && !t.completed);
   const nextTasks = projectTasks.filter(t => (t.column === 'Med' || t.column === 'Low') && !t.completed);
@@ -77,23 +92,17 @@ export function AppProvider({ children }) {
     if (diff < -50 && activeColIndex > 0) setActiveColIndex(c => c - 1);
   };
 
-  const handleLongPressStart = (task) => {
-    pressTimer.current = setTimeout(() => openWizard(task), 500);
-  };
-  const handleLongPressEnd = () => {
-    if (pressTimer.current) clearTimeout(pressTimer.current);
-  };
-
   // --- Actions ---
   const openWizard = (task = null) => {
     setGlobalMenuOpen(false);
+    setViewTaskOpen(false);
     setCustomTagInput('');
     if (task) {
       setEditingTask(task.id);
-      setWizardForm({ ...task, infoOpen: null });
+      setWizardForm({ ...EMPTY_WIZARD, ...task, infoOpen: null });
     } else {
       setEditingTask(null);
-      setWizardForm({ title: '', reach: 3, impact: 3, confidence: 3, effort: 3, moscow: 'Should', infoOpen: null, tags: [] });
+      setWizardForm(EMPTY_WIZARD);
     }
     setWizardOpen(true);
   };
@@ -104,17 +113,31 @@ export function AppProvider({ children }) {
     if (editingTask) {
       setTasks(prev => prev.map(t => t.id === editingTask ? { ...t, ...wizardForm, column: col } : t));
     } else {
-      setTasks(prev => [...prev, { id: Date.now(), projectId: activeProjectId, ...wizardForm, column: col, completed: false }]);
+      setTasks(prev => [
+        ...prev,
+        { id: Date.now(), projectId: activeProjectId, ...wizardForm, column: col, completed: false },
+      ]);
     }
     setWizardOpen(false);
+  };
+
+  const openViewTask = (task) => {
+    setViewingTask(task);
+    setViewTaskOpen(true);
+  };
+
+  const closeViewTask = () => {
+    setViewTaskOpen(false);
+    setViewingTask(null);
   };
 
   const saveQuickNote = () => {
     if (!quickNoteText.trim()) return;
     setTasks(prev => [...prev, {
       id: Date.now(), projectId: activeProjectId, title: quickNoteText,
+      description: '',
       reach: 3, impact: 3, confidence: 3, effort: 3, moscow: 'Should',
-      column: 'To Sort', completed: false, tags: []
+      column: 'To Sort', completed: false, tags: [],
     }]);
     setQuickNoteText('');
     setQuickNoteOpen(false);
@@ -141,10 +164,14 @@ export function AppProvider({ children }) {
     setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: true } : t));
   };
 
+  const deleteTask = (id) => {
+    setTasks(prev => prev.filter(t => t.id !== id));
+  };
+
   const toggleTag = (tag) => {
     setWizardForm(prev => ({
       ...prev,
-      tags: prev.tags.includes(tag) ? prev.tags.filter(t => t !== tag) : [...prev.tags, tag]
+      tags: prev.tags.includes(tag) ? prev.tags.filter(t => t !== tag) : [...prev.tags, tag],
     }));
   };
 
@@ -165,6 +192,8 @@ export function AppProvider({ children }) {
     wizardOpen, setWizardOpen,
     quickNoteOpen, setQuickNoteOpen,
     goalToast,
+    // View task
+    viewTaskOpen, viewingTask, openViewTask, closeViewTask,
     // Wizard
     wizardForm, setWizardForm, customTagInput, setCustomTagInput, editingTask,
     currentScore, predictedColumn,
@@ -173,9 +202,9 @@ export function AppProvider({ children }) {
     // Quick note
     quickNoteText, setQuickNoteText,
     // Gesture handlers
-    handleTouchStart, handleTouchEnd, handleLongPressStart, handleLongPressEnd,
+    handleTouchStart, handleTouchEnd,
     // Actions
-    openWizard, saveWizard, saveQuickNote, createProject, completeTask, toggleTag,
+    openWizard, saveWizard, saveQuickNote, createProject, completeTask, deleteTask, toggleTag,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

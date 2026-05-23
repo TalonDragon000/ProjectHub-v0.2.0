@@ -35,6 +35,13 @@ export default function PriorityWizard() {
             onChange={e => setWizardForm({ ...wizardForm, title: e.target.value })}
             className="w-full bg-transparent border-b-2 border-default focus:border-accent-primary outline-none py-2 text-2xl font-bold text-primary transition-colors"
           />
+          <textarea
+            placeholder="Short description (optional)..."
+            value={wizardForm.description || ''}
+            onChange={e => setWizardForm({ ...wizardForm, description: e.target.value })}
+            rows={2}
+            className="w-full bg-transparent border-b border-default focus:border-accent-primary outline-none py-2 text-sm text-secondary placeholder:text-faint transition-colors resize-none"
+          />
           <div className="flex flex-wrap gap-2 items-center">
             <div>
               <label className="text-[10px] text-faint font-bold uppercase tracking-widest mb-1 px-1 block">Quick Tags</label>

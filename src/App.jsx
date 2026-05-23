@@ -13,6 +13,7 @@ import PriorityWizard from './components/modals/PriorityWizard.jsx';
 import QuickNoteModal from './components/modals/QuickNoteModal.jsx';
 import VaultModal from './components/modals/VaultModal.jsx';
 import OnboardingModal from './components/modals/OnboardingModal.jsx';
+import TaskViewModal from './components/modals/TaskViewModal.jsx';
 
 export default function App() {
   const { activeTab, handleTouchStart, handleTouchEnd } = useApp();
@@ -38,6 +39,7 @@ export default function App() {
       <OnboardingModal />
       <VaultModal />
       <PriorityWizard />
+      <TaskViewModal />
 
       <GoalToast />
 
