@@ -6,14 +6,7 @@ import { calculateScore } from '../lib/rice.js';
 import { COLUMNS } from '../constants.js';
 
 export default function TaskCard({ task }) {
-  const {
-    activeColIndex,
-    completeTask,
-    deleteTask,
-    openWizard,
-    openViewTask,
-  } = useApp();
-
+  const { activeColIndex, completeTask, deleteTask, openWizard, openViewTask } = useApp();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const inSortColumn = COLUMNS[activeColIndex] === 'To Sort';
@@ -23,78 +16,33 @@ export default function TaskCard({ task }) {
     openViewTask(task);
   };
 
-  const openMenu = (e) => {
-    e.stopPropagation();
-    setMenuOpen(true);
-  };
-
+  const openMenu = (e) => { e.stopPropagation(); setMenuOpen(true); };
   const closeMenu = () => setMenuOpen(false);
 
-  const handleView = (e) => {
-    e.stopPropagation();
-    closeMenu();
-    openViewTask(task);
-  };
-
-  const handlePrioritize = (e) => {
-    e.stopPropagation();
-    closeMenu();
-    openWizard(task);
-  };
-
-  const handleComplete = (e) => {
-    e.stopPropagation();
-    closeMenu();
-    completeTask(task.id);
-  };
-
-  const handleDelete = (e) => {
-    e.stopPropagation();
-    closeMenu();
-    deleteTask(task.id);
-  };
+  const handleView = (e) => { e.stopPropagation(); closeMenu(); openViewTask(task); };
+  const handlePrioritize = (e) => { e.stopPropagation(); closeMenu(); openWizard(task); };
+  const handleComplete = (e) => { e.stopPropagation(); closeMenu(); completeTask(task.id); };
+  const handleDelete = (e) => { e.stopPropagation(); closeMenu(); deleteTask(task.id); };
 
   return (
     <div className="relative group">
-      {menuOpen && (
-        <div className="fixed inset-0 z-30" onClick={closeMenu} />
-      )}
+      {menuOpen && <div className="fixed inset-0 z-30" onClick={closeMenu} />}
 
-              {menuOpen && (
-          <div className="absolute top-10 right-3 z-40 bg-surface border border-subtle rounded-xl shadow-2xl overflow-hidden min-w-[160px] animate-in fade-in-0 zoom-in-95 duration-100">
-            <button
-              onClick={handleView}
-              className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-secondary hover:bg-raised hover:text-primary transition-colors text-left"
-            >
-              <Eye className="w-4 h-4 shrink-0" />
-              View
-            </button>
-            <button
-              onClick={handlePrioritize}
-              className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-secondary hover:bg-raised hover:text-primary transition-colors text-left"
-            >
-              <Target className="w-4 h-4 shrink-0" />
-              Prioritize
-            </button>
-            {!inSortColumn && (
-              <button
-                onClick={handleComplete}
-                className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-secondary hover:bg-raised hover:text-primary transition-colors text-left"
-              >
-                <CircleCheck className="w-4 h-4 shrink-0" />
-                Complete
-              </button>
-            )}
-            <div className="border-t border-subtle" />
-            <button
-              onClick={handleDelete}
-              className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-500 hover:bg-red-500/10 transition-colors text-left"
-            >
-              <Trash2 className="w-4 h-4 shrink-0" />
-              Delete
-            </button>
-          </div>
-        )}
+      {/* Dropdown — outside overflow-hidden card */}
+      {menuOpen && (
+        <div className="absolute top-10 right-3 z-40 bg-surface border border-subtle rounded-xl shadow-2xl overflow-hidden min-w-[160px] animate-in fade-in-0 zoom-in-95 duration-100">
+          <button onClick={handleView} className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-secondary hover:bg-raised hover:text-primary transition-colors text-left">
+            <Eye className="w-4 h-4 shrink-0" /> View
+          </button>
+          <button onClick={handlePrioritize} className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-secondary hover:bg-raised hover:text-primary transition-colors text-left">
+            <Target className="w-4 h-4 shrink-0" /> Prioritize
+          </button>
+          <div className="border-t border-subtle" />
+          <button onClick={handleDelete} className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-500 hover:bg-red-500/10 transition-colors text-left">
+            <Trash2 className="w-4 h-4 shrink-0" /> Delete
+          </button>
+        </div>
+      )}
 
       <div
         onClick={handleCardClick}
@@ -102,15 +50,29 @@ export default function TaskCard({ task }) {
       >
         <div className={`absolute left-0 top-0 bottom-0 w-1 ${getGaugeColor(task.column)}`} />
 
-        <button
-          onClick={openMenu}
-          className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-lg text-faint opacity-0 group-hover:opacity-100 hover:bg-raised hover:text-primary transition-all duration-150 z-10"
-          aria-label="Task options"
-        >
-          <MoreHorizontal className="w-4 h-4" />
-        </button>
+        {/* Top-right controls */}
+        <div className="absolute top-3 right-3 flex items-center gap-1">
+          {/* Persistent complete — always visible, low-key until hover */}
+          {!inSortColumn && (
+            <button
+              onClick={handleComplete}
+              className="w-7 h-7 flex items-center justify-center rounded-lg text-faint opacity-40 hover:opacity-100 hover:text-accent-secondary hover:bg-accent-secondary/10 transition-all duration-150"
+              aria-label="Mark complete"
+            >
+              <CircleCheck className="w-4 h-4" />
+            </button>
+          )}
+          {/* Overflow menu — visible on hover */}
+          <button
+            onClick={openMenu}
+            className="w-7 h-7 flex items-center justify-center rounded-lg text-faint opacity-0 group-hover:opacity-100 hover:bg-raised hover:text-primary transition-all duration-150 z-10"
+            aria-label="Task options"
+          >
+            <MoreHorizontal className="w-4 h-4" />
+          </button>
+        </div>
 
-        <div className="flex items-start mb-2 pl-2 pr-8">
+        <div className="flex items-start mb-2 pl-2 pr-16">
           <div className="min-w-0 flex-1">
             <h3 className="font-bold text-primary leading-snug">{task.title}</h3>
             {task.description && (
