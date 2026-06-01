@@ -1,27 +1,29 @@
-const CACHE_NAME = 'project-hub-v0.2.0';
-const ASSETS = [
-  '/',
-  '/index.html',
-  '/src/main.jsx',
-  '/src/App.jsx',
-  '/src/index.css',
-  '/manifest.json'
-];
+const CACHE_NAME = 'project-hub-v0.5.1';
 
-// Install Service Worker and Cache Assets
-self.addEventListener('install', (e) => {
+// On install, skip waiting so the new SW takes over immediately.
+self.addEventListener('install', () => self.skipWaiting());
+
+// On activate, delete all caches from previous versions.
+self.addEventListener('activate', (e) => {
   e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
-    })
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+    ).then(() => self.clients.claim())
   );
 });
 
-// Cache and Return Requests
+// Network-first strategy: always try the network, fall back to cache.
+// This ensures users always get fresh assets after a deploy.
 self.addEventListener('fetch', (e) => {
+  if (e.request.method !== 'GET') return;
+
   e.respondWith(
-    caches.match(e.request).then((response) => {
-      return response || fetch(e.request);
-    })
+    fetch(e.request)
+      .then(res => {
+        const clone = res.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
+        return res;
+      })
+      .catch(() => caches.match(e.request))
   );
 });

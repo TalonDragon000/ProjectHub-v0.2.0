@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { useApp } from './context/AppContext.jsx';
 
 import AppHeader from './components/AppHeader.jsx';
@@ -9,12 +9,15 @@ import GoalToast from './components/GoalToast.jsx';
 import HomeDashboard from './views/HomeDashboard.jsx';
 import TasksWorkspace from './views/TasksWorkspace.jsx';
 
-import PriorityWizard from './components/modals/PriorityWizard.jsx';
-import QuickNoteModal from './components/modals/QuickNoteModal.jsx';
-import VaultModal from './components/modals/VaultModal.jsx';
+// OnboardingModal is eager — it is the first screen new users see.
 import OnboardingModal from './components/modals/OnboardingModal.jsx';
-import TaskViewModal from './components/modals/TaskViewModal.jsx';
-import ProjectEditModal from './components/modals/ProjectEditModal.jsx';
+
+// All other modals are lazy — they are only needed after the user interacts.
+const PriorityWizard   = lazy(() => import('./components/modals/PriorityWizard.jsx'));
+const QuickNoteModal   = lazy(() => import('./components/modals/QuickNoteModal.jsx'));
+const VaultModal       = lazy(() => import('./components/modals/VaultModal.jsx'));
+const TaskViewModal    = lazy(() => import('./components/modals/TaskViewModal.jsx'));
+const ProjectEditModal = lazy(() => import('./components/modals/ProjectEditModal.jsx'));
 
 export default function App() {
   const { activeTab, handleTouchStart, handleTouchEnd } = useApp();
@@ -36,12 +39,15 @@ export default function App() {
       <BottomNav />
       <GlobalMenu />
 
-      <QuickNoteModal />
       <OnboardingModal />
-      <VaultModal />
-      <PriorityWizard />
-      <TaskViewModal />
-      <ProjectEditModal />
+
+      <Suspense fallback={null}>
+        <QuickNoteModal />
+        <VaultModal />
+        <PriorityWizard />
+        <TaskViewModal />
+        <ProjectEditModal />
+      </Suspense>
 
       <GoalToast />
 
