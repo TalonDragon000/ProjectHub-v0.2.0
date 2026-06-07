@@ -4,7 +4,25 @@ This file is the authoritative development history for Project Hub. It documents
 
 ---
 
-## v0.5.0 — Blank Slate First Run with Opt-In Demo
+## v0.2.4-patch — OAuth Integration
+**Status:** In Progress (Building on v0.2.3 Baseline)
+
+### What Was Built
+* **v0.2.4-auth Feature Branch:** Officially initiated the authentication epic, keeping the core local-first application architecture stable.
+* **Google Cloud Project Infrastructure:** Provisioned a new Google Cloud developer account and successfully initialized the client project ecosystem.
+* **Secured API Environment:** Generated OAuth 2.0 Client IDs and mapped out the secure environment variable structure to abstract credentials from source control.
+
+### Key Decisions
+
+**Strategic Patch Versioning**
+Opted to track this milestone as a patch release (`v0.2.4`) rather than a minor version bump. Although identity management introduces significant new functional modules and routes, the project remains in a foundational validation phase. Consolidating these changes as patches keeps the overall project scope bounded within the same unified `v0.2.0` application lifecycle.
+
+**Centralized Client ID Architecture**
+Determined that Google OAuth Client IDs should be managed per project/environment, not per device. To minimize configuration overhead without compromising security, a single "Development" Client ID will be shared across all local machines (using `localhost` redirect URIs), while a distinct, isolated Client ID will be generated later exclusively for the "Production" environment.
+
+---
+
+## v0.2.3-patch — Blank Slate First Run with Opt-In Demo
 **Status:** Shipped
 
 ### What was built
@@ -37,7 +55,7 @@ A list item at the top of the active projects list (e.g., a "+ Add project" row)
 
 ---
 
-## v0.4.0 — Project Lifecycle Management (Archive, Restore, Pin)
+## v0.2.2-patch — Project Lifecycle Management (Archive, Restore, Pin)
 **Status:** Shipped
 
 ### What was built
@@ -145,7 +163,7 @@ The task title alone is often insufficient context when reviewing a backlog item
 
 ---
 
-## v0.3.0 — Project-Level Strategy Layer
+## v0.2.1-patch — Project-Level Strategy Layer
 **Status:** Shipped
 
 ### What was built
@@ -213,3 +231,6 @@ All modals render as `absolute inset-0` inside the `max-w-md` app shell, not in 
 - Sweller, J. (1988). Cognitive load during problem solving. *Cognitive Science*, 12(2), 257–285.
 - Sweller, J. (1994). Cognitive load theory, learning difficulty, and instructional design. *Learning and Instruction*, 4(4), 295–312.
 - Tversky, A., & Kahneman, D. (1974). Judgment under uncertainty: Heuristics and biases. *Science*, 185(4157), 1124–1131.
+- Google Identity. (2026). Using OAuth 2.0 for Web Server Applications. Google Developers.
+- Leiba, B. (2010). OAuth Web authorization protocol. *IEEE Internet Computing*, 14(1), 74–77.
+- Reschke, J. (2015). Hypertext Transfer Protocol (HTTP/1.1): Authentication (No. RFC 7235). RFC Editor.

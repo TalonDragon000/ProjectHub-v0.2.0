@@ -8,9 +8,9 @@ export const getGaugeColor = (column) => {
   }
 };
 
-export const fireConfetti = () => {
-  if (typeof window.confetti !== 'function') return;
+export const fireConfetti = async () => {
+  const { default: confetti } = await import('canvas-confetti');
   const style = getComputedStyle(document.documentElement);
   const colors = [1, 2, 3, 4, 5].map(n => style.getPropertyValue(`--confetti-${n}`).trim());
-  window.confetti({ particleCount: 80, spread: 70, origin: { x: 0.5, y: 0.5 }, colors });
+  confetti({ particleCount: 80, spread: 70, origin: { x: 0.5, y: 0.5 }, colors });
 };
