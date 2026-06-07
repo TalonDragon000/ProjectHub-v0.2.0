@@ -1,9 +1,7 @@
-const CACHE_NAME = 'project-hub-v0.5.1';
+const CACHE_NAME = 'project-hub-v0.6.0';
 
-// On install, skip waiting so the new SW takes over immediately.
 self.addEventListener('install', () => self.skipWaiting());
 
-// On activate, delete all caches from previous versions.
 self.addEventListener('activate', (e) => {
   e.waitUntil(
     caches.keys().then(keys =>
@@ -12,10 +10,13 @@ self.addEventListener('activate', (e) => {
   );
 });
 
-// Network-first strategy: always try the network, fall back to cache.
-// This ensures users always get fresh assets after a deploy.
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
+
+  const url = new URL(e.request.url);
+
+  // Never cache Supabase API calls or auth endpoints
+  if (url.hostname.includes('supabase.co') || url.hostname.includes('supabase.in')) return;
 
   e.respondWith(
     fetch(e.request)

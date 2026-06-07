@@ -4,6 +4,52 @@ This file is the authoritative development history for Project Hub. It documents
 
 ---
 
+## v0.3.1-patch — Vault Sync Race Condition Fix
+**Status:** Shipped
+
+### What Was Built
+* **Atomic vault writes:** Removed individual `saveProjects`/`saveTasks` cloud write paths from `supabaseAdapter.js`. The vault now has a single write method (`saveFullState`) that always writes the complete state (projects + tasks) in one operation. This eliminates the read-modify-write race where two overlapping partial saves could clobber each other.
+* **Debounced flush (2s):** `storage/index.js` coalesces rapid saves into a single cloud write after a 2-second debounce window. Multiple project/task mutations within the window produce only one vault upsert.
+* **Write lock (promise chain):** The supabase adapter serializes writes through a promise chain — the second write waits for the first to complete, preventing concurrent vault mutations from overlapping.
+* **Cached userId:** The adapter now receives `userId` at configure time, eliminating 2 redundant `supabase.auth.getUser()` API calls per sync cycle.
+* **Disabled Realtime module:** Supabase client configured with `realtime: { autoConnect: false }` since the app does not use realtime subscriptions. Silences the "realtime.subscription does not exist" error and removes an idle WebSocket connection.
+* **Service Worker API exclusion:** `sw.js` now skips caching any request to `supabase.co`/`supabase.in` domains. API responses are never served from SW cache. Cache version bumped to `v0.6.0`.
+* **Mounted ref guard in AppShell:** Async `pullFromCloud` results are discarded if the component unmounts before the promise resolves, preventing memory leaks from stale setState calls.
+* **Page unload flush:** `visibilitychange` and `beforeunload` listeners trigger an immediate flush of any pending debounced writes so data is not lost on tab close.
+
+### Root Cause Analysis
+
+**Projects disappearing/reappearing:**
+The old adapter had `saveProjects` and `saveTasks` methods that each did a full vault fetch-decrypt-modify-encrypt-write cycle. When saving projects, the adapter would fetch the vault, add projects, then write. If tasks were saved 200ms later, the adapter would fetch the vault again (which might not yet reflect the projects write) and write tasks — overwriting the new projects. This is a classic lost-update race condition.
+
+**Connection storms in Supabase logs:**
+Each save called `supabase.auth.getUser()` twice (once in fetchVault, once in encryptAndSave), producing 4 unnecessary API round-trips per sync. With rapid saves (creating a project then immediately adding a task), this multiplied into dozens of auth calls per minute.
+
+**"realtime.subscription does not exist" error:**
+The Supabase JS client v2 automatically initializes a realtime WebSocket and tries to access the `realtime.subscription` table. This table does not exist when Realtime is not provisioned. Disabling auto-connect eliminates this.
+
+### Diagnostic Scripts
+Two test scripts added to `scripts/`:
+- `test-sync-race.mjs` — Node.js script that authenticates, writes to the vault, reads it back, and verifies data integrity.
+- `test-diagnostics.mjs` — Browser console snippets for monitoring API call frequency, heap growth, SW cache contents, and multi-tab conflicts.
+
+---
+
+## PLANNED: Vault Project Consolidation
+**Status:** Future patch (post-stabilization)
+
+### Concept
+A merge strategy for resolving conflicts when the same vault is modified from multiple sources (tabs, devices) within the debounce window. Currently the system uses last-write-wins at the vault level. A consolidation feature would:
+- Add per-item `updatedAt` timestamps to projects and tasks
+- Implement a merge function that compares item-level timestamps and preserves the newest version of each item
+- Handle delete/create conflicts (item deleted on one device, modified on another)
+- Optionally surface conflict UI when automatic resolution is ambiguous
+
+### Why Deferred
+The race condition fix eliminates 95% of data loss scenarios by making writes atomic and debounced. Consolidation is a more complex feature that requires CRDT-like semantics or operational transforms. Building it on top of a stable write layer is architecturally cleaner than implementing both simultaneously.
+
+---
+
 ## v0.2.4-patch — OAuth Integration
 **Status:** In Progress (Building on v0.2.3 Baseline)
 

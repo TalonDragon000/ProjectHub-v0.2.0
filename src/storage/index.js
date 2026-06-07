@@ -1,10 +1,9 @@
 import { localStorageAdapter } from './localStorageAdapter.js';
 
 let syncEnabled = false;
+let flushTimer = null;
+const DEBOUNCE_MS = 2000;
 
-// Lazily resolved — only imported after the user authenticates and
-// enableSync() is called. This keeps crypto.js and compress.js out
-// of the initial bundle entirely.
 let _supabaseAdapter = null;
 async function getAdapter() {
   if (!_supabaseAdapter) {
@@ -16,24 +15,41 @@ async function getAdapter() {
 
 export function enableSync() {
   syncEnabled = true;
-  // Kick off the import immediately so it's ready by the time the first
-  // save comes in — avoids a waterfall on the very first write.
   getAdapter().catch(() => {});
 }
 
 export function disableSync() {
   syncEnabled = false;
+  if (flushTimer) {
+    clearTimeout(flushTimer);
+    flushTimer = null;
+  }
 }
 
 export function isSyncEnabled() {
   return syncEnabled;
 }
 
-function backgroundSync(fn) {
+function scheduleFlush() {
   if (!syncEnabled) return;
-  fn().catch((err) => {
-    console.warn('[sync] background sync failed:', err.message);
-  });
+  if (flushTimer) clearTimeout(flushTimer);
+  flushTimer = setTimeout(() => {
+    flushTimer = null;
+    flushToCloud();
+  }, DEBOUNCE_MS);
+}
+
+async function flushToCloud() {
+  if (!syncEnabled) return;
+  try {
+    const projects = localStorageAdapter.getProjects();
+    const tasks = localStorageAdapter.getTasks();
+    const adapter = await getAdapter();
+    await adapter.saveFullState(projects, tasks);
+    localStorage.setItem('projecthub_sync_ts', new Date().toISOString());
+  } catch (err) {
+    console.warn('[sync] flush failed:', err.message);
+  }
 }
 
 export const storage = {
@@ -43,7 +59,7 @@ export const storage = {
 
   saveProjects(projects) {
     localStorageAdapter.saveProjects(projects);
-    backgroundSync(async () => (await getAdapter()).saveProjects(projects));
+    scheduleFlush();
   },
 
   getTasks() {
@@ -52,7 +68,7 @@ export const storage = {
 
   saveTasks(tasks) {
     localStorageAdapter.saveTasks(tasks);
-    backgroundSync(async () => (await getAdapter()).saveTasks(tasks));
+    scheduleFlush();
   },
 };
 
@@ -68,8 +84,9 @@ export async function pullFromCloud() {
     return null;
   }
 
-  const projects = await adapter.getProjects();
-  const tasks = await adapter.getTasks();
+  const state = await adapter.getFullState();
+  const projects = state.projects || [];
+  const tasks = state.tasks || [];
 
   localStorageAdapter.saveProjects(projects);
   localStorageAdapter.saveTasks(tasks);
@@ -83,4 +100,29 @@ export async function pushToCloud(projects, tasks) {
   const adapter = await getAdapter();
   await adapter.saveFullState(projects, tasks);
   localStorage.setItem('projecthub_sync_ts', new Date().toISOString());
+}
+
+export function flushNow() {
+  if (flushTimer) {
+    clearTimeout(flushTimer);
+    flushTimer = null;
+  }
+  flushToCloud();
+}
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden' && flushTimer) {
+      clearTimeout(flushTimer);
+      flushTimer = null;
+      flushToCloud();
+    }
+  });
+  window.addEventListener('beforeunload', () => {
+    if (flushTimer) {
+      clearTimeout(flushTimer);
+      flushTimer = null;
+      flushToCloud();
+    }
+  });
 }

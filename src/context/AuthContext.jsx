@@ -38,14 +38,14 @@ export function AuthProvider({ children }) {
   const isAuthenticated = !!user;
   const isUnlocked = !!cryptoKey;
 
-  const restoreSessionKey = useCallback(async () => {
+  const restoreSessionKey = useCallback(async (userId) => {
     const storedKey = sessionStorage.getItem(SESSION_KEY_STORAGE);
     const storedSalt = sessionStorage.getItem(SESSION_SALT_STORAGE);
     if (storedKey && storedSalt) {
       const restored = await importKey(storedKey);
       setCryptoKey(restored);
       setSalt(storedSalt);
-      configureSupabaseAdapter(restored, storedSalt);
+      configureSupabaseAdapter(restored, storedSalt, userId);
       return true;
     }
     return false;
@@ -70,7 +70,7 @@ export function AuthProvider({ children }) {
       if (s?.user) {
         localStorage.removeItem(GUEST_STORAGE);
         setIsGuestState(false);
-        restoreSessionKey().then(async (restored) => {
+        restoreSessionKey(s.user.id).then(async (restored) => {
           if (!restored) {
             const exists = await checkVaultExists(s.user.id);
             if (exists) {
@@ -82,7 +82,6 @@ export function AuthProvider({ children }) {
           setLoading(false);
         });
       } else {
-        // No session — auth page is already visible; just clear loading.
         setLoading(false);
       }
     });
@@ -103,7 +102,7 @@ export function AuthProvider({ children }) {
         localStorage.removeItem(GUEST_STORAGE);
         setIsGuestState(false);
         (async () => {
-          const restored = await restoreSessionKey();
+          const restored = await restoreSessionKey(s.user.id);
           if (!restored) {
             const exists = await checkVaultExists(s.user.id);
             if (exists) {
@@ -167,7 +166,7 @@ export function AuthProvider({ children }) {
     const exported = await exportKey(key);
     sessionStorage.setItem(SESSION_KEY_STORAGE, exported);
     sessionStorage.setItem(SESSION_SALT_STORAGE, saltB64);
-    configureSupabaseAdapter(key, saltB64);
+    configureSupabaseAdapter(key, saltB64, user?.id);
 
     return display;
   };
@@ -198,7 +197,7 @@ export function AuthProvider({ children }) {
     const exported = await exportKey(key);
     sessionStorage.setItem(SESSION_KEY_STORAGE, exported);
     sessionStorage.setItem(SESSION_SALT_STORAGE, saltB64);
-    configureSupabaseAdapter(key, saltB64);
+    configureSupabaseAdapter(key, saltB64, u.id);
 
     return true;
   };

@@ -1,28 +1,39 @@
 import { supabase } from '../lib/supabase';
-import { encrypt, decrypt, deriveEncryptionKey, generateSalt, bufferToBase64Public, base64ToBufferPublic } from '../lib/crypto';
+import { encrypt, decrypt, bufferToBase64Public, base64ToBufferPublic } from '../lib/crypto';
 import { compress, decompress } from '../lib/compress';
 
 let cachedCryptoKey = null;
 let cachedSalt = null;
+let cachedUserId = null;
 
-export function configure(cryptoKey, saltBase64) {
+export function configure(cryptoKey, saltBase64, userId) {
   cachedCryptoKey = cryptoKey;
   cachedSalt = saltBase64;
+  cachedUserId = userId;
 }
 
 export function reset() {
   cachedCryptoKey = null;
   cachedSalt = null;
+  cachedUserId = null;
+}
+
+async function getUserId() {
+  if (cachedUserId) return cachedUserId;
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return null;
+  cachedUserId = user.id;
+  return user.id;
 }
 
 async function fetchVault() {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
+  const userId = await getUserId();
+  if (!userId) return null;
 
   const { data, error } = await supabase
     .from('user_vaults')
     .select('encrypted_blob, iv, salt, updated_at')
-    .eq('user_id', user.id)
+    .eq('user_id', userId)
     .maybeSingle();
 
   if (error) throw error;
@@ -37,11 +48,13 @@ async function decryptVault(vault) {
   return JSON.parse(decompressed);
 }
 
+let writeChain = Promise.resolve();
+
 async function encryptAndSave(payload) {
   if (!cachedCryptoKey) throw new Error('No encryption key available');
 
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error('Not authenticated');
+  const userId = await getUserId();
+  if (!userId) throw new Error('Not authenticated');
 
   const json = JSON.stringify(payload);
   const compressed = await compress(json);
@@ -51,7 +64,7 @@ async function encryptAndSave(payload) {
   const { error } = await supabase
     .from('user_vaults')
     .upsert({
-      user_id: user.id,
+      user_id: userId,
       encrypted_blob: ciphertext,
       iv,
       salt: cachedSalt,
@@ -70,26 +83,8 @@ async function getFullState() {
 }
 
 export const supabaseAdapter = {
-  async getProjects() {
-    const state = await getFullState();
-    return state.projects || [];
-  },
-
-  async saveProjects(projects) {
-    const state = await getFullState();
-    state.projects = projects;
-    await encryptAndSave(state);
-  },
-
-  async getTasks() {
-    const state = await getFullState();
-    return state.tasks || [];
-  },
-
-  async saveTasks(tasks) {
-    const state = await getFullState();
-    state.tasks = tasks;
-    await encryptAndSave(state);
+  async getFullState() {
+    return getFullState();
   },
 
   async getUpdatedAt() {
@@ -98,6 +93,10 @@ export const supabaseAdapter = {
   },
 
   async saveFullState(projects, tasks) {
-    await encryptAndSave({ projects, tasks });
+    const op = writeChain.then(() => encryptAndSave({ projects, tasks })).catch(err => {
+      console.error('[vault] write failed:', err);
+    });
+    writeChain = op;
+    return op;
   },
 };

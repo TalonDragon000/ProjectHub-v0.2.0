@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect } from 'react';
+import React, { lazy, Suspense, useEffect, useRef } from 'react';
 import { AppProvider, useApp } from './context/AppContext.jsx';
 import { useAuth } from './context/AuthContext.jsx';
 import { enableSync, disableSync, pullFromCloud, pushToCloud } from './storage/index.js';
@@ -23,11 +23,17 @@ const ProfileModal     = lazy(() => import('./components/modals/ProfileModal.jsx
 function AppShellInner() {
   const { activeTab, handleTouchStart, handleTouchEnd, setProjects, setTasks } = useApp();
   const { isAuthenticated, isUnlocked, needsSetup, needsUnlock, dismissAuth } = useAuth();
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => { mountedRef.current = false; };
+  }, []);
 
   useEffect(() => {
     if (isAuthenticated && isUnlocked) {
       enableSync();
       pullFromCloud().then((data) => {
+        if (!mountedRef.current) return;
         if (data) {
           setProjects(data.projects);
           setTasks(data.tasks);
@@ -46,6 +52,7 @@ function AppShellInner() {
 
   const handleUnlocked = () => {
     pullFromCloud().then((data) => {
+      if (!mountedRef.current) return;
       if (data) {
         setProjects(data.projects);
         setTasks(data.tasks);
