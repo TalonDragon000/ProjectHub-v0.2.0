@@ -161,7 +161,6 @@ export function AuthProvider({ children }) {
 
     setCryptoKey(key);
     setSalt(saltB64);
-    setNeedsSetup(false);
 
     const exported = await exportKey(key);
     sessionStorage.setItem(SESSION_KEY_STORAGE, exported);
