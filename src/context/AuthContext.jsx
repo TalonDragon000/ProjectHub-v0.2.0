@@ -199,7 +199,10 @@ export function AuthProvider({ children }) {
     sessionStorage.setItem(SESSION_SALT_STORAGE, saltB64);
     configureSupabaseAdapter(key, saltB64, u.id);
 
-    return true;
+    const FreshData = await pullFromCloud();
+
+    setNeedsUnlock(false);
+    return FreshData;
   };
 
   const dismissAuth = () => {
