@@ -13,8 +13,7 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET' || !e.request.url.startsWith('http')) {
     console.log('Skipping non-http request', e.request.url);
-    } return;
-  });
+  }
 
   const url = new URL(e.request.url);
 
